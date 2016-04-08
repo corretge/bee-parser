@@ -27,6 +27,7 @@
    "autoload": {
         "psr-4": { 
             "Ubqos\\Bee\\": "lib/Bee" ,
+            "Ubqos\\Bee\\Parser\\Tests\\" : "usr/Tests",
             "Marshalled\\": "var/lib"
         }
     },
