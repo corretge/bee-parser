@@ -1,0 +1,34 @@
+{
+    "name": "ubqos/bee-parser",
+    "description": "Bee files parser",
+    "keywords": ["php", "ubqos", "bee", "yaml", "parser"],
+    "homepage": "https://github.com/ubqos/bee-parser",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Àlex Corretgé",
+            "email": "alex@corretge.cat"
+        }
+        ],
+    "support": {
+        "issues": "https://github.com/ubqos/bee-parser/issues"
+    },
+    "require": {
+        "php": ">=5.6.18"
+    },
+    "require-dev": {
+    },
+    "config": {
+        "component-dir": "usr/lib/composer",
+        "vendor-dir": "usr/lib/vendor",
+        "bin-dir" : "bin",
+        "cache-dir" : "var/cache/composer"
+    },
+   "autoload": {
+        "psr-4": { 
+            "Ubqos\\Bee\\": "lib/Bee" ,
+            "Marshalled\\": "var/lib"
+        }
+    },
+    "minimum-stability": "dev"
+}

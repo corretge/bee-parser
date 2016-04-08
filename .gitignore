@@ -1,0 +1,21 @@
+# composer vendor folder
+usr/lib/
+
+# composer bin folder
+bin/
+
+# Marshal compiler destination
+var/lib/
+
+# variable files for builds or whatelse (yes, I know: var/lib is under var/)
+var/
+
+# configuration files. config.bee.dist is already versioned, config.bee is not
+etc/*.bee
+
+# Developer Workstation rubbish
+.idea
+.DS_Store
+*~
+*.swp
+*.bak
