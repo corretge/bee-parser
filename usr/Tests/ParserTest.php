@@ -8,7 +8,7 @@
 
 namespace Ubqos\Bee\Parser\Tests;
 
-use Ubqos\Bee\Parser\Yaml;
+use Ubqos\Bee\Parser\Bee;
 use Ubqos\Bee\Parser;
 
 class ParserTest extends \PHPUnit_Framework_TestCase
@@ -422,39 +422,7 @@ EOF;
 foo: !php/object:O:24:"Ubqos\Bee\Parser\Tests\B":1:{s:1:"b";s:3:"foo";}
 bar: 1
 EOF;
-        $this->assertEquals(array('foo' => new B(), 'bar' => 1), $this->parser->parse($input, Yaml::PARSE_OBJECT), '->parse() is able to parse objects');
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testObjectSupportEnabledPassingTrue()
-    {
-        $input = <<<EOF
-foo: !php/object:O:24:"Ubqos\Bee\Parser\Tests\B":1:{s:1:"b";s:3:"foo";}
-bar: 1
-EOF;
-        $this->assertEquals(array('foo' => new B(), 'bar' => 1), $this->parser->parse($input, false, true), '->parse() is able to parse objects');
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testObjectSupportEnabledWithDeprecatedTag()
-    {
-        $input = <<<EOF
-foo: !!php/object:O:24:"Ubqos\Bee\Parser\Tests\B":1:{s:1:"b";s:3:"foo";}
-bar: 1
-EOF;
-        $this->assertEquals(array('foo' => new B(), 'bar' => 1), $this->parser->parse($input, Yaml::PARSE_OBJECT), '->parse() is able to parse objects');
-    }
-
-    /**
-     * @dataProvider invalidDumpedObjectProvider
-     */
-    public function testObjectSupportDisabledButNoExceptions($input)
-    {
-        $this->assertEquals(array('foo' => null, 'bar' => 1), $this->parser->parse($input), '->parse() does not parse objects');
+        $this->assertEquals(array('foo' => new B(), 'bar' => 1), $this->parser->parse($input, Bee::PARSE_OBJECT), '->parse() is able to parse objects');
     }
 
     /**
@@ -462,16 +430,7 @@ EOF;
      */
     public function testObjectForMap($yaml, $expected)
     {
-        $this->assertEquals($expected, $this->parser->parse($yaml, Yaml::PARSE_OBJECT_FOR_MAP));
-    }
-
-    /**
-     * @group legacy
-     * @dataProvider getObjectForMapTests
-     */
-    public function testObjectForMapEnabledWithMappingUsingBooleanToggles($yaml, $expected)
-    {
-        $this->assertEquals($expected, $this->parser->parse($yaml, false, false, true));
+        $this->assertEquals($expected, $this->parser->parse($yaml, Bee::PARSE_OBJECT_FOR_MAP));
     }
 
     public function getObjectForMapTests()
@@ -559,17 +518,7 @@ EOF;
      */
     public function testObjectsSupportDisabledWithExceptions($yaml)
     {
-        $this->parser->parse($yaml, Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE);
-    }
-
-    /**
-     * @group legacy
-     * @dataProvider invalidDumpedObjectProvider
-     * @expectedException \Ubqos\Bee\Parser\Exception\ParseException
-     */
-    public function testObjectsSupportDisabledWithExceptionsUsingBooleanToggles($yaml)
-    {
-        $this->parser->parse($yaml, true);
+        $this->parser->parse($yaml, Bee::PARSE_EXCEPTION_ON_INVALID_TYPE);
     }
 
     /**
@@ -633,7 +582,7 @@ EOF;
      */
     public function testMultipleDocumentsNotSupportedException()
     {
-        Yaml::parse(<<<'EOL'
+        Bee::parse(<<<'EOL'
 # Ranking of 1998 home runs
 ---
 - Mark McGwire
@@ -653,7 +602,7 @@ EOL
      */
     public function testSequenceInAMapping()
     {
-        Yaml::parse(<<<'EOF'
+        Bee::parse(<<<'EOF'
 yaml:
   hash: me
   - array stuff
@@ -666,7 +615,7 @@ EOF
      */
     public function testMappingInASequence()
     {
-        Yaml::parse(<<<'EOF'
+        Bee::parse(<<<'EOF'
 yaml:
   - array stuff
   hash: me
@@ -680,7 +629,7 @@ EOF
      */
     public function testScalarInSequence()
     {
-        Yaml::parse(<<<EOF
+        Bee::parse(<<<EOF
 foo:
     - bar
 "missing colon"
@@ -714,7 +663,7 @@ EOD;
                 'child' => 'first',
             ),
         );
-        $this->assertSame($expected, Yaml::parse($input));
+        $this->assertSame($expected, Bee::parse($input));
     }
 
     public function testMappingDuplicateKeyFlow()
@@ -728,7 +677,7 @@ EOD;
                 'child' => 'first',
             ),
         );
-        $this->assertSame($expected, Yaml::parse($input));
+        $this->assertSame($expected, Bee::parse($input));
     }
 
     public function testEmptyValue()
@@ -737,7 +686,7 @@ EOD;
 hash:
 EOF;
 
-        $this->assertEquals(array('hash' => null), Yaml::parse($input));
+        $this->assertEquals(array('hash' => null), Bee::parse($input));
     }
 
     public function testCommentAtTheRootIndent()
@@ -751,7 +700,7 @@ EOF;
                     'class' => 'Bar',
                 ),
             ),
-        ), Yaml::parse(<<<'EOF'
+        ), Bee::parse(<<<'EOF'
 # comment 1
 services:
 # comment 2
@@ -779,7 +728,7 @@ header
 
 footer # comment3
 EOT
-        ), Yaml::parse(<<<'EOF'
+        ), Bee::parse(<<<'EOF'
 content: |
     # comment 1
     header
@@ -807,7 +756,7 @@ header
 
 footer # comment3
 EOT
-        )), Yaml::parse(<<<'EOF'
+        )), Bee::parse(<<<'EOF'
 -
     content: |
         # comment 1
@@ -838,7 +787,7 @@ header
 
 footer # comment3
 EOT
-        )), Yaml::parse(<<<'EOF'
+        )), Bee::parse(<<<'EOF'
 -
     title: some title
     content: |
@@ -867,7 +816,7 @@ EOF
             'map' => array('key' => 'var-value'),
             'list_in_map' => array('key' => array('var-value')),
             'map_in_map' => array('foo' => array('bar' => 'var-value')),
-        ), Yaml::parse(<<<'EOF'
+        ), Bee::parse(<<<'EOF'
 var:  &var var-value
 scalar: *var
 list: [ *var ]

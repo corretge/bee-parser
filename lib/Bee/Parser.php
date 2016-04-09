@@ -10,7 +10,7 @@ namespace Ubqos\Bee;
 
 use Ubqos\Bee\Parser\Exception\ParseException;
 use Ubqos\Bee\Parser\Inline;
-use Ubqos\Bee\Parser\Yaml;
+use Ubqos\Bee\Parser\Bee;
 
 /**
  * Parser parses YAML strings to convert them to PHP arrays.
@@ -50,33 +50,7 @@ class Parser
      */
     public function parse($value, $flags = 0)
     {
-        if (is_bool($flags)) {
-            @trigger_error('Passing a boolean flag to toggle exception handling is deprecated since version 3.1 and will be removed in 4.0. Use the Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE flag instead.', E_USER_DEPRECATED);
-
-            if ($flags) {
-                $flags = Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE;
-            } else {
-                $flags = 0;
-            }
-        }
-
-        if (func_num_args() >= 3) {
-            @trigger_error('Passing a boolean flag to toggle object support is deprecated since version 3.1 and will be removed in 4.0. Use the Yaml::PARSE_OBJECT flag instead.', E_USER_DEPRECATED);
-
-            if (func_get_arg(2)) {
-                $flags |= Yaml::PARSE_OBJECT;
-            }
-        }
-
-        if (func_num_args() >= 4) {
-            @trigger_error('Passing a boolean flag to toggle object for map support is deprecated since version 3.1 and will be removed in 4.0. Use the Yaml::PARSE_OBJECT_FOR_MAP flag instead.', E_USER_DEPRECATED);
-
-            if (func_get_arg(3)) {
-                $flags |= Yaml::PARSE_OBJECT_FOR_MAP;
-            }
-        }
-
-        if (!preg_match('//u', $value)) {
+       if (!preg_match('//u', $value)) {
             throw new ParseException('The YAML value does not appear to be valid UTF-8.');
         }
         $this->currentLineNb = -1;
@@ -325,7 +299,7 @@ class Parser
             mb_internal_encoding($mbEncoding);
         }
 
-        if (Yaml::PARSE_OBJECT_FOR_MAP & $flags && !is_object($data) && 'mapping' === $context) {
+        if (Bee::PARSE_OBJECT_FOR_MAP & $flags && !is_object($data) && 'mapping' === $context) {
             $object = new \stdClass();
 
             foreach ($data as $key => $value) {

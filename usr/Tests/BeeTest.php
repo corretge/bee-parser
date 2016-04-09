@@ -8,15 +8,15 @@
 
 namespace Ubqos\Bee\Parser\Tests;
 
-use Ubqos\Bee\Parser\Yaml;
+use Ubqos\Bee\Parser\Bee;
 
-class YamlTest extends \PHPUnit_Framework_TestCase
+class BeeTest extends \PHPUnit_Framework_TestCase
 {
     public function testParseAndDump()
     {
         $data = array('lorem' => 'ipsum', 'dolor' => 'sit');
-        $yml = Yaml::dump($data);
-        $parsed = Yaml::parse($yml);
+        $bee = Bee::dump($data);
+        $parsed = Bee::parse($bee);
         $this->assertEquals($data, $parsed);
     }
 
@@ -26,7 +26,7 @@ class YamlTest extends \PHPUnit_Framework_TestCase
      */
     public function testZeroIndentationThrowsException()
     {
-        Yaml::dump(array('lorem' => 'ipsum', 'dolor' => 'sit'), 2, 0);
+        Bee::dump(array('lorem' => 'ipsum', 'dolor' => 'sit'), 2, 0);
     }
 
     /**
@@ -35,6 +35,6 @@ class YamlTest extends \PHPUnit_Framework_TestCase
      */
     public function testNegativeIndentationThrowsException()
     {
-        Yaml::dump(array('lorem' => 'ipsum', 'dolor' => 'sit'), 2, -4);
+        Bee::dump(array('lorem' => 'ipsum', 'dolor' => 'sit'), 2, -4);
     }
 }

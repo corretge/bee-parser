@@ -10,7 +10,7 @@ namespace Ubqos\Bee\Parser\Tests;
 
 use Ubqos\Bee\Parser;
 use Ubqos\Bee\Parser\Dumper;
-use Ubqos\Bee\Parser\Yaml;
+use Ubqos\Bee\Parser\Bee;
 
 class DumperTest extends \PHPUnit_Framework_TestCase
 {
@@ -71,35 +71,6 @@ foobar:
 
 EOF;
         $this->assertEquals($expected, $dumper->dump($this->array, 4, 0));
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testSetIndentation()
-    {
-        $this->dumper->setIndentation(7);
-
-        $expected = <<<'EOF'
-'': bar
-foo: '#bar'
-'foo''bar': {  }
-bar:
-       - 1
-       - foo
-foobar:
-       foo: bar
-       bar:
-              - 1
-              - foo
-       foobar:
-              foo: bar
-              bar:
-                     - 1
-                     - foo
-
-EOF;
-        $this->assertEquals($expected, $this->dumper->dump($this->array, 4, 0));
     }
 
     public function testSpecifications()
@@ -204,17 +175,7 @@ EOF;
 
     public function testObjectSupportEnabled()
     {
-        $dump = $this->dumper->dump(array('foo' => new A(), 'bar' => 1), 0, 0, Yaml::DUMP_OBJECT);
-
-        $this->assertEquals('{ foo: !php/object:O:24:"Ubqos\Bee\Parser\Tests\A":1:{s:1:"a";s:3:"foo";}, bar: 1 }', $dump, '->dump() is able to dump objects');
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testObjectSupportEnabledPassingTrue()
-    {
-        $dump = $this->dumper->dump(array('foo' => new A(), 'bar' => 1), 0, 0, false, true);
+        $dump = $this->dumper->dump(array('foo' => new A(), 'bar' => 1), 0, 0, Bee::DUMP_OBJECT);
 
         $this->assertEquals('{ foo: !php/object:O:24:"Ubqos\Bee\Parser\Tests\A":1:{s:1:"a";s:3:"foo";}, bar: 1 }', $dump, '->dump() is able to dump objects');
     }
@@ -231,16 +192,7 @@ EOF;
      */
     public function testObjectSupportDisabledWithExceptions()
     {
-        $this->dumper->dump(array('foo' => new A(), 'bar' => 1), 0, 0, Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE);
-    }
-
-    /**
-     * @group legacy
-     * @expectedException \Ubqos\Bee\Parser\Exception\DumpException
-     */
-    public function testObjectSupportDisabledWithExceptionsPassingTrue()
-    {
-        $this->dumper->dump(array('foo' => new A(), 'bar' => 1), 0, 0, true);
+        $this->dumper->dump(array('foo' => new A(), 'bar' => 1), 0, 0, Bee::DUMP_EXCEPTION_ON_INVALID_TYPE);
     }
 
     /**
@@ -294,9 +246,9 @@ EOF;
     public function testDumpObjectAsMap($object, $expected)
     {
 
-        $yaml = $this->dumper->dump($object, 0, 0, Yaml::DUMP_OBJECT_AS_MAP);
+        $yaml = $this->dumper->dump($object, 0, 0, Bee::DUMP_OBJECT_AS_MAP);
 
-        $this->assertEquals($expected, Yaml::parse($yaml, Yaml::PARSE_OBJECT_FOR_MAP));
+        $this->assertEquals($expected, Bee::parse($yaml, Bee::PARSE_OBJECT_FOR_MAP));
     }
 
     public function objectAsMapProvider()
@@ -340,7 +292,7 @@ EOF;
             ),
         );
 
-        $this->assertSame(file_get_contents(__DIR__.'/Fixtures/multiple_lines_as_literal_block.bee'), $this->dumper->dump($data, 3, 0, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK));
+        $this->assertSame(file_get_contents(__DIR__.'/Fixtures/multiple_lines_as_literal_block.bee'), $this->dumper->dump($data, 3, 0, Bee::DUMP_MULTI_LINE_LITERAL_BLOCK));
     }
 
     /**

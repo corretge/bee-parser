@@ -9,7 +9,7 @@
 namespace Ubqos\Bee\Parser\Tests;
 
 use Ubqos\Bee\Parser\Inline;
-use Ubqos\Bee\Parser\Yaml;
+use Ubqos\Bee\Parser\Bee;
 
 class InlineTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,18 +26,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseWithMapObjects($yaml, $value)
     {
-        $actual = Inline::parse($yaml, Yaml::PARSE_OBJECT_FOR_MAP);
-
-        $this->assertSame(serialize($value), serialize($actual));
-    }
-
-    /**
-     * @group legacy
-     * @dataProvider getTestsForParseWithMapObjects
-     */
-    public function testParseWithMapObjectsPassingTrue($yaml, $value)
-    {
-        $actual = Inline::parse($yaml, false, false, true);
+        $actual = Inline::parse($yaml, Bee::PARSE_OBJECT_FOR_MAP);
 
         $this->assertSame(serialize($value), serialize($actual));
     }
@@ -155,15 +144,6 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expected, Inline::parse($yaml, 0, array('var' => 'var-value')));
     }
 
-    /**
-     * @group legacy
-     * @dataProvider getDataForParseReferences
-     */
-    public function testParseReferencesAsFifthArgument($yaml, $expected)
-    {
-        $this->assertSame($expected, Inline::parse($yaml, false, false, false, array('var' => 'var-value')));
-    }
-
     public function getDataForParseReferences()
     {
         return array(
@@ -186,19 +166,6 @@ class InlineTest extends \PHPUnit_Framework_TestCase
             'c' => 'Brian',
         );
         $this->assertSame(array($foo), Inline::parse('[*foo]', 0, array('foo' => $foo)));
-    }
-
-    /**
-     * @group legacy
-     */
-    public function testParseMapReferenceInSequenceAsFifthArgument()
-    {
-        $foo = array(
-            'a' => 'Steve',
-            'b' => 'Clark',
-            'c' => 'Brian',
-        );
-        $this->assertSame(array($foo), Inline::parse('[*foo]', false, false, false, array('foo' => $foo)));
     }
 
     /**
@@ -247,31 +214,6 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     public function getScalarIndicators()
     {
         return array(array('|'), array('>'));
-    }
-
-    /**
-     * @group legacy
-     * throws \Ubqos\Bee\Parser\Exception\ParseException in 4.0
-     */
-    public function testParseUnquotedScalarStartingWithPercentCharacter()
-    {
-        $deprecations = array();
-        set_error_handler(function ($type, $msg) use (&$deprecations) {
-            if (E_USER_DEPRECATED !== $type) {
-                restore_error_handler();
-
-                return call_user_func_array('PHPUnit_Util_ErrorHandler::handleError', func_get_args());
-            }
-
-            $deprecations[] = $msg;
-        });
-
-        Inline::parse('{ foo: %foo }');
-
-        restore_error_handler();
-
-        $this->assertCount(1, $deprecations);
-        $this->assertContains('Not quoting a scalar starting with the "%" indicator character is deprecated since Symfony 3.1 and will throw a ParseException in 4.0.', $deprecations[0]);
     }
 
     public function getTestsForParse()
@@ -501,7 +443,7 @@ class InlineTest extends \PHPUnit_Framework_TestCase
         $expected->setDate($year, $month, $day);
         $expected->setTime($hour, $minute, $second);
 
-        $this->assertEquals($expected, Inline::parse($yaml, Yaml::PARSE_DATETIME));
+        $this->assertEquals($expected, Inline::parse($yaml, Bee::PARSE_DATETIME));
     }
 
     public function getTimestampTests()
