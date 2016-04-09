@@ -1,7 +1,7 @@
---- %YAML:1.0
+--- %BEE:1.0
 test: Simple Sequence
 brief: |
-    You can specify a list in YAML by placing each
+    You can specify a list in BEE by placing each
     member of the list on a new line with an opening
     dash. These lists are called sequences.
 yaml: |
@@ -13,7 +13,7 @@ php: |
 ---
 test: Sequence With Item Being Null In The Middle
 brief: |
-    You can specify a list in YAML by placing each
+    You can specify a list in BEE by placing each
     member of the list on a new line with an opening
     dash. These lists are called sequences.
 yaml: |
@@ -25,7 +25,7 @@ php: |
 ---
 test: Sequence With Last Item Being Null
 brief: |
-    You can specify a list in YAML by placing each
+    You can specify a list in BEE by placing each
     member of the list on a new line with an opening
     dash. These lists are called sequences.
 yaml: |
@@ -50,7 +50,7 @@ php: |
 ---
 test: Mixed Sequences
 brief: |
-    Sequences can contain any YAML data,
+    Sequences can contain any BEE data,
     including strings and other sequences.
 yaml: |
     - apple
@@ -81,7 +81,7 @@ brief: |
     You can add a keyed list (also known as a dictionary or
     hash) to your document by placing each member of the
     list on a new line, with a colon separating the key
-    from its value.  In YAML, this type of list is called
+    from its value.  In BEE, this type of list is called
     a mapping.
 yaml: |
     foo: whatever
@@ -160,10 +160,10 @@ brief: |
      can place the mapping on the same line as the
      dash as a shortcut.
 yaml: |
-     - work on YAML.py:
+     - work on BEE.py:
         - work on Store
 php: |
-    array(array('work on YAML.py' => array('work on Store')))
+    array(array('work on BEE.py' => array('work on Store')))
 ---
 test: Sequence-in-Mapping Shortcut
 todo: true

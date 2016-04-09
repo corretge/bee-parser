@@ -24,7 +24,7 @@ php: |
 test: Values aligned
 brief: |
     Often times human editors of documents will align the values even
-    though YAML emitters generally don't.
+    though BEE emitters generally don't.
 yaml: |
     red:   baron
     white: walls

@@ -1,4 +1,4 @@
---- %YAML:1.0
+--- %BEE:1.0
 test: Compact notation
 brief: |
     Compact notation for sets of mappings with single element
@@ -51,7 +51,7 @@ php: |
       )
     )
   )
---- %YAML:1.0
+--- %BEE:1.0
 test: Compact notation
 brief: |
     Compact notation for sets of mappings with single element
@@ -104,7 +104,7 @@ php: |
       )
     )
   )
---- %YAML:1.0
+--- %BEE:1.0
 test: Compact notation
 brief: |
     Compact notation for sets of mappings with single element

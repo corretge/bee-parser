@@ -1,4 +1,4 @@
---- %YAML:1.0
+--- %BEE:1.0
 test: Empty Sequence
 brief: >
     You can represent the empty sequence

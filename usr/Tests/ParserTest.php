@@ -39,12 +39,12 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $path = __DIR__.'/Fixtures';
 
         $tests = array();
-        $files = $parser->parse(file_get_contents($path.'/index.yml'));
+        $files = $parser->parse(file_get_contents($path.'/index.bee'));
         foreach ($files as $file) {
-            $yamls = file_get_contents($path.'/'.$file.'.yml');
+            $yamls = file_get_contents($path.'/'.$file.'.bee');
 
             // split YAMLs documents
-            foreach (preg_split('/^---( %YAML\:1\.0)?/m', $yamls) as $yaml) {
+            foreach (preg_split('/^---( %BEE\:1\.0)?/m', $yamls) as $yaml) {
                 if (!$yaml) {
                     continue;
                 }

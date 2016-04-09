@@ -14,9 +14,9 @@ python-error: causes error because no value specified
 test: Not indenting enough
 brief: |
     There was a bug in PyYaml where it was off by one
-    in the indentation check.  It was allowing the YAML
+    in the indentation check.  It was allowing the BEE
     below.
-# This is actually valid YAML now. Someone should tell showell.
+# This is actually valid BEE now. Someone should tell showell.
 yaml: |
     foo:
     firstline: 1

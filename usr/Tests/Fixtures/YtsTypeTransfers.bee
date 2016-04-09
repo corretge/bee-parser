@@ -1,4 +1,4 @@
---- %YAML:1.0
+--- %BEE:1.0
 test: Strings
 brief: >
     Any group of characters beginning with an
@@ -51,7 +51,7 @@ php: |
 ---
 test: Forcing Strings
 brief: >
-    Any YAML type can be forced into a string using the
+    Any BEE type can be forced into a string using the
     explicit !str method.
 yaml: |
     date string: !str 2001-08-01
@@ -98,7 +98,7 @@ test: Multi-line Quoted Strings
 todo: true
 brief: >
     Both single- and double-quoted strings may be
-    carried on to new lines in your YAML document.
+    carried on to new lines in your BEE document.
     They must be indented a step and indentation
     is interpreted as a single space.
 yaml: |
@@ -116,7 +116,7 @@ test: Plain scalars
 todo: true
 brief: >
     Unquoted strings may also span multiple lines, if they
-    are free of YAML space indicators and indented.
+    are free of BEE space indicators and indented.
 yaml: |
     - My little toe is broken in two places;
     - I'm crazy to have skied this way;

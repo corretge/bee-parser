@@ -1,4 +1,4 @@
---- %YAML:1.0
+--- %BEE:1.0
 test: Some characters at the beginning of a string must be escaped
 brief: >
     Some characters at the beginning of a string must be escaped

@@ -1,8 +1,8 @@
---- %YAML:1.0
+--- %BEE:1.0
 test: Trailing Document Separator
 todo: true
 brief: >
-    You can separate YAML documents
+    You can separate BEE documents
     with a string of three dashes.
 yaml: |
     - foo: 1
@@ -22,7 +22,7 @@ test: Leading Document Separator
 todo: true
 brief: >
     You can explicitly give an opening
-    document separator to your YAML stream.
+    document separator to your BEE stream.
 yaml: |
     ---
     - foo: 1
@@ -38,14 +38,14 @@ ruby: |
     [ { 'foo' => 1, 'bar' => 2 } ]
 
 ---
-test: YAML Header
+test: BEE Header
 todo: true
 brief: >
     The opening separator can contain directives
-    to the YAML parser, such as the version
+    to the BEE parser, such as the version
     number.
 yaml: |
-    --- %YAML:1.0
+    --- %BEE:1.0
     foo: 1
     bar: 2
 php: |
@@ -68,7 +68,7 @@ php: |
 ---
 test: Multiple Document Separators in Block
 brief: >
-    This technique allows you to embed other YAML
+    This technique allows you to embed other BEE
     documents within literal blocks.
 yaml: |
     foo: |

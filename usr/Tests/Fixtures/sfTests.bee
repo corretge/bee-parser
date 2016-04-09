@@ -1,4 +1,4 @@
---- %YAML:1.0
+--- %BEE:1.0
 test: Multiple quoted string on one line
 brief: >
     Multiple quoted string on one line

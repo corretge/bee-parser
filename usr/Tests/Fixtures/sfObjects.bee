@@ -1,4 +1,4 @@
---- %YAML:1.0
+--- %BEE:1.0
 test: Objects
 brief: >
     Comments at the end of a line

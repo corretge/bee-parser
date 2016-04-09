@@ -1,4 +1,4 @@
---- %YAML:1.0
+--- %BEE:1.0
 test: Simple Alias Example
 brief: >
     If you need to refer to the same item of data twice,

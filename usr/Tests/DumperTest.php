@@ -104,12 +104,12 @@ EOF;
 
     public function testSpecifications()
     {
-        $files = $this->parser->parse(file_get_contents($this->path.'/index.yml'));
+        $files = $this->parser->parse(file_get_contents($this->path.'/index.bee'));
         foreach ($files as $file) {
-            $yamls = file_get_contents($this->path.'/'.$file.'.yml');
+            $yamls = file_get_contents($this->path.'/'.$file.'.bee');
 
-            // split YAMLs documents
-            foreach (preg_split('/^---( %YAML\:1\.0)?/m', $yamls) as $yaml) {
+            // split BEEs documents
+            foreach (preg_split('/^---( %BEE\:1\.0)?/m', $yamls) as $yaml) {
                 if (!$yaml) {
                     continue;
                 }
@@ -340,7 +340,7 @@ EOF;
             ),
         );
 
-        $this->assertSame(file_get_contents(__DIR__.'/Fixtures/multiple_lines_as_literal_block.yml'), $this->dumper->dump($data, 3, 0, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK));
+        $this->assertSame(file_get_contents(__DIR__.'/Fixtures/multiple_lines_as_literal_block.bee'), $this->dumper->dump($data, 3, 0, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK));
     }
 
     /**

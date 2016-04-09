@@ -1,4 +1,4 @@
---- %YAML:1.0
+--- %BEE:1.0
 test: Single ending newline
 brief: >
     A pipe character, followed by an indented
@@ -37,7 +37,7 @@ php: |
 test: Three trailing newlines in literals
 brief: >
     To give you more control over how space
-    is preserved in text blocks, YAML has
+    is preserved in text blocks, BEE has
     the keep '+' and chomp '-' indicators.
     The keep indicator will preserve all
     ending newlines, while the chomp indicator
