@@ -9,8 +9,9 @@
 namespace Ubqos\Bee\Parser;
 
 /**
- * Dumper dumps PHP variables to YAML strings.
+ * Dumper dumps PHP variables to Bee strings.
  *
+ * Original YAML class by:
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class Dumper
@@ -35,14 +36,14 @@ class Dumper
     }
 
     /**
-     * Dumps a PHP value to YAML.
+     * Dumps a PHP value to Bee.
      *
      * @param mixed $input  The PHP value
-     * @param int   $inline The level where you switch to inline YAML
+     * @param int   $inline The level where you switch to inline Bee
      * @param int   $indent The level of indentation (used internally)
-     * @param int   $flags  A bit field of Bee::DUMP_* constants to customize the dumped YAML string
+     * @param int   $flags  A bit field of Bee::DUMP_* constants to customize the dumped Bee string
      *
-     * @return string The YAML representation of the PHP value
+     * @return string The Bee representation of the PHP value
      */
     public function dump($input, $inline = 0, $indent = 0, $flags = 0)
     {

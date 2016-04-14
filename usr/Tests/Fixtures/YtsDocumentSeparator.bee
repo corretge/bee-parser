@@ -4,7 +4,7 @@ todo: true
 brief: >
     You can separate BEE documents
     with a string of three dashes.
-yaml: |
+bee: |
     - foo: 1
       bar: 2
     ---
@@ -23,7 +23,7 @@ todo: true
 brief: >
     You can explicitly give an opening
     document separator to your BEE stream.
-yaml: |
+bee: |
     ---
     - foo: 1
       bar: 2
@@ -44,7 +44,7 @@ brief: >
     The opening separator can contain directives
     to the BEE parser, such as the version
     number.
-yaml: |
+bee: |
     --- %BEE:1.0
     foo: 1
     bar: 2
@@ -59,7 +59,7 @@ brief: >
     are treated as blocks or strings, as the
     document separator should have no indentation
     preceding it.
-yaml: |
+bee: |
     foo: |
         ---
 php: |
@@ -70,7 +70,7 @@ test: Multiple Document Separators in Block
 brief: >
     This technique allows you to embed other BEE
     documents within literal blocks.
-yaml: |
+bee: |
     foo: |
         ---
         foo: bar

@@ -14,7 +14,7 @@ use Ubqos\Bee\Parser;
 /**
  * Bee class offers convenience methods to load and dump Bee strings.
  *
- * Original Bee class by:
+ * Original YAML class by:
  * @author Fabien Potencier <fabien@symfony.com>
  *
  * New one Bee class by:

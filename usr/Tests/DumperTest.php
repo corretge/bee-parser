@@ -77,22 +77,23 @@ EOF;
     {
         $files = $this->parser->parse(file_get_contents($this->path.'/index.bee'));
         foreach ($files as $file) {
-            $yamls = file_get_contents($this->path.'/'.$file.'.bee');
+            $bees = file_get_contents($this->path.'/'.$file.'.bee');
 
             // split BEEs documents
-            foreach (preg_split('/^---( %BEE\:1\.0)?/m', $yamls) as $yaml) {
-                if (!$yaml) {
+            foreach (preg_split('/^---( %BEE\:1\.0)?/m', $bees) as $bee) {
+                if (!$bee) {
                     continue;
                 }
 
-                $test = $this->parser->parse($yaml);
+                $test = $this->parser->parse($bee);
                 if (isset($test['dump_skip']) && $test['dump_skip']) {
                     continue;
                 } elseif (isset($test['todo']) && $test['todo']) {
                     // TODO
                 } else {
                     eval('$expected = '.trim($test['php']).';');
-                    $this->assertSame($expected, $this->parser->parse($this->dumper->dump($expected, 10)), $test['test']);
+                    $actual = $this->parser->parse($this->dumper->dump($expected, 10));
+                    $this->assertSame($expected, $actual, $test['test']);
                 }
             }
         }
@@ -246,9 +247,9 @@ EOF;
     public function testDumpObjectAsMap($object, $expected)
     {
 
-        $yaml = $this->dumper->dump($object, 0, 0, Bee::DUMP_OBJECT_AS_MAP);
+        $bee = $this->dumper->dump($object, 0, 0, Bee::DUMP_OBJECT_AS_MAP);
 
-        $this->assertEquals($expected, Bee::parse($yaml, Bee::PARSE_OBJECT_FOR_MAP));
+        $this->assertEquals($expected, Bee::parse($bee, Bee::PARSE_OBJECT_FOR_MAP));
     }
 
     public function objectAsMapProvider()

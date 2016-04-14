@@ -2,7 +2,7 @@
 test: Unindented collection
 brief: >
     Unindented collection
-yaml: |
+bee: |
     collection:
     - item1
     - item2
@@ -13,7 +13,7 @@ php: |
 test: Nested unindented collection (two levels)
 brief: >
     Nested unindented collection
-yaml: |
+bee: |
     collection:
         key:
         - a
@@ -25,7 +25,7 @@ php: |
 test: Nested unindented collection (three levels)
 brief: >
     Nested unindented collection
-yaml: |
+bee: |
     collection:
         key:
             subkey:
@@ -38,7 +38,7 @@ php: |
 test: Key/value after unindented collection (1)
 brief: >
     Key/value after unindented collection (1)
-yaml: |
+bee: |
     collection:
         key:
         - a
@@ -51,7 +51,7 @@ php: |
 test: Key/value after unindented collection (at the same level)
 brief: >
     Key/value after unindented collection
-yaml: |
+bee: |
     collection:
         key:
         - a
@@ -64,7 +64,7 @@ php: |
 test: Shortcut Key after unindented collection
 brief: >
     Key/value after unindented collection
-yaml: |
+bee: |
     collection:
     - key: foo
       foo: bar
@@ -74,7 +74,7 @@ php: |
 test: Shortcut Key after unindented collection with custom spaces
 brief: >
     Key/value after unindented collection
-yaml: |
+bee: |
     collection:
     -  key: foo
        foo: bar

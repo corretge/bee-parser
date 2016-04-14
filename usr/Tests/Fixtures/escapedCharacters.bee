@@ -1,125 +1,125 @@
 test: outside double quotes
-yaml: |
+bee: |
     \0 \ \a \b \n
 php: |
     "\\0 \\ \\a \\b \\n"
 ---
 test: null
-yaml: |
+bee: |
     "\0"
 php: |
     "\x00"
 ---
 test: bell
-yaml: |
+bee: |
     "\a"
 php: |
     "\x07"
 ---
 test: backspace
-yaml: |
+bee: |
     "\b"
 php: |
     "\x08"
 ---
 test: horizontal tab (1)
-yaml: |
+bee: |
     "\t"
 php: |
     "\x09"
 ---
 test: horizontal tab (2)
-yaml: |
+bee: |
     "\	"
 php: |
     "\x09"
 ---
 test: line feed
-yaml: |
+bee: |
     "\n"
 php: |
     "\x0a"
 ---
 test: vertical tab
-yaml: |
+bee: |
     "\v"
 php: |
     "\x0b"
 ---
 test: form feed
-yaml: |
+bee: |
     "\f"
 php: |
     "\x0c"
 ---
 test: carriage return
-yaml: |
+bee: |
     "\r"
 php: |
     "\x0d"
 ---
 test: escape
-yaml: |
+bee: |
     "\e"
 php: |
    "\x1b"
 ---
 test: space
-yaml: |
+bee: |
     "\ "
 php: |
     "\x20"
 ---
 test: slash
-yaml: |
+bee: |
     "\/"
 php: |
     "\x2f"
 ---
 test: backslash
-yaml: |
+bee: |
     "\\"
 php: |
     "\\"
 ---
 test: Unicode next line
-yaml: |
+bee: |
     "\N"
 php: |
     "\xc2\x85"
 ---
 test: Unicode non-breaking space
-yaml: |
+bee: |
     "\_"
 php: |
     "\xc2\xa0"
 ---
 test: Unicode line separator
-yaml: |
+bee: |
     "\L"
 php: |
     "\xe2\x80\xa8"
 ---
 test: Unicode paragraph separator
-yaml: |
+bee: |
     "\P"
 php: |
     "\xe2\x80\xa9"
 ---
 test: Escaped 8-bit Unicode
-yaml: |
+bee: |
     "\x42"
 php: |
     "B"
 ---
 test: Escaped 16-bit Unicode
-yaml: |
+bee: |
     "\u20ac"
 php: |
     "\xe2\x82\xac"
 ---
 test: Escaped 32-bit Unicode
-yaml: |
+bee: |
     "\U00000043"
 php: |
     "C"
@@ -129,7 +129,7 @@ note: |
     Currently throws an error parsing first line. Maybe Symfony Yaml doesn't support
     continuation of string across multiple lines? Keeping test here but disabled.
 todo: true
-yaml: |
+bee: |
     "Fun with \\
     \" \a \b \e \f \
     \n \r \t \v \0 \
@@ -139,7 +139,7 @@ php: |
     "Fun with \x5C\n\x22 \x07 \x08 \x1B \x0C\n\x0A \x0D \x09 \x0B \x00\n\x20 \xA0 \x85 \xe2\x80\xa8 \xe2\x80\xa9\nA A A"
 ---
 test: Double quotes with a line feed
-yaml: |
+bee: |
    { double: "some value\n \"some quoted string\" and 'some single quotes one'" }
 php: |
     array(
@@ -147,7 +147,7 @@ php: |
     )
 ---
 test: Backslashes
-yaml: |
+bee: |
     { single: 'foo\Var', no-quotes: foo\Var, double: "foo\\Var" }
 php: |
     array(

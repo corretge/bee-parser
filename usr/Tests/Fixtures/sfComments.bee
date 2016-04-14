@@ -2,7 +2,7 @@
 test: Comments at the end of a line
 brief: >
     Comments at the end of a line
-yaml: |
+bee: |
     ex1: "foo # bar"
     ex2: "foo # bar" # comment
     ex3: 'foo # bar' # comment
@@ -16,7 +16,7 @@ php: |
 test: Comments in the middle
 brief: >
   Comments in the middle
-yaml: |
+bee: |
     foo:
     # some comment
     # some comment
@@ -29,7 +29,7 @@ php: |
 test: Comments on a hash line
 brief: >
   Comments on a hash line
-yaml: |
+bee: |
     foo:   # a comment
       foo: bar # a comment
 php: |
@@ -38,7 +38,7 @@ php: |
 test: 'Value starting with a #'
 brief: >
   'Value starting with a #'
-yaml: |
+bee: |
     foo:   '#bar'
 php: |
     array('foo' => '#bar')
@@ -46,7 +46,7 @@ php: |
 test: Document starting with a comment and a separator
 brief: >
   Commenting before document start is allowed
-yaml: |
+bee: |
     # document comment
     ---
     foo: bar # a comment
@@ -56,21 +56,21 @@ php: |
 test: Comment containing a colon on a hash line
 brief: >
     Comment containing a colon on a scalar line
-yaml: 'foo # comment: this is also part of the comment'
+bee: 'foo # comment: this is also part of the comment'
 php: |
     'foo'
 ---
 test: 'Hash key containing a #'
 brief: >
     'Hash key containing a #'
-yaml: 'foo#bar: baz'
+bee: 'foo#bar: baz'
 php: |
     array('foo#bar' => 'baz')
 ---
 test: 'Hash key ending with a space and a #'
 brief: >
     'Hash key ending with a space and a #'
-yaml: |
+bee: |
     'foo #': baz
 php: |
     array('foo #' => 'baz')

@@ -5,7 +5,7 @@ brief: >
     you can use a << in place substitution. This is not part of the official
     BEE spec, but a widely implemented extension. See the following URL for
     details: http://yaml.org/type/merge.html
-yaml: |
+bee: |
     foo: &foo
         a: Steve
         b: Clark

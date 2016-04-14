@@ -2,7 +2,7 @@
 test: Some characters at the beginning of a string must be escaped
 brief: >
     Some characters at the beginning of a string must be escaped
-yaml: |
+bee: |
     foo: '| bar'
 php: |
     array('foo' => '| bar')
@@ -10,7 +10,7 @@ php: |
 test: A key can be a quoted string
 brief: >
   A key can be a quoted string
-yaml: |
+bee: |
     "foo1": bar
     'foo2': bar
     "foo \" bar": bar

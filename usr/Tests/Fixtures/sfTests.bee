@@ -2,19 +2,19 @@
 test: Multiple quoted string on one line
 brief: >
     Multiple quoted string on one line
-yaml: |
+bee: |
     stripped_title: { name: "foo bar", help: "bar foo" }
 php: |
     array('stripped_title' => array('name' => 'foo bar', 'help' => 'bar foo'))
 ---
 test: Empty sequence
-yaml: |
+bee: |
     foo: [ ]
 php: |
     array('foo' => array())
 ---
 test: Empty value
-yaml: |
+bee: |
     foo:
 php: |
     array('foo' => null)
@@ -22,7 +22,7 @@ php: |
 test: Inline string parsing
 brief: >
     Inline string parsing
-yaml: |
+bee: |
     test: ['complex: string', 'another [string]']
 php: |
     array('test' => array('complex: string', 'another [string]'))
@@ -30,7 +30,7 @@ php: |
 test: Boolean
 brief: >
     Boolean
-yaml: |
+bee: |
     - false
     - true
     - null
@@ -54,7 +54,7 @@ php: |
 test: Empty lines in literal blocks
 brief: >
   Empty lines in literal blocks
-yaml: |
+bee: |
   foo:
     bar: |
       foo
@@ -68,7 +68,7 @@ php: |
 test: Empty lines in folded blocks
 brief: >
   Empty lines in folded blocks
-yaml: |
+bee: |
   foo:
     bar: >
 
@@ -82,7 +82,7 @@ php: |
 test: IP addresses
 brief: >
   IP addresses
-yaml: |
+bee: |
   foo: 10.0.0.2
 php: |
   array('foo' => '10.0.0.2')
@@ -90,7 +90,7 @@ php: |
 test: A sequence with an embedded mapping
 brief: >
   A sequence with an embedded mapping
-yaml: |
+bee: |
   - foo
   - bar: { bar: foo }
 php: |
@@ -99,7 +99,7 @@ php: |
 test: A sequence with an unordered array
 brief: >
   A sequence with an unordered array
-yaml: |
+bee: |
   1: foo
   0: bar
 php: |
@@ -107,28 +107,28 @@ php: |
 ---
 test: Octal
 brief: as in spec example 2.19, octal value is converted
-yaml: |
+bee: |
   foo: 0123
 php: |
   array('foo' => 83)
 ---
 test: Octal strings
 brief: Octal notation in a string must remain a string
-yaml: |
+bee: |
   foo: "0123"
 php: |
   array('foo' => '0123')
 ---
 test: Octal strings
 brief: Octal notation in a string must remain a string
-yaml: |
+bee: |
   foo: '0123'
 php: |
   array('foo' => '0123')
 ---
 test: Octal strings
 brief: Octal notation in a string must remain a string
-yaml: |
+bee: |
   foo: |
     0123
 php: |
@@ -136,14 +136,14 @@ php: |
 ---
 test: Document as a simple hash
 brief: Document as a simple hash
-yaml: |
+bee: |
   { foo: bar }
 php: |
   array('foo' => 'bar')
 ---
 test: Document as a simple array
 brief: Document as a simple array
-yaml: |
+bee: |
   [ foo, bar ]
 php: |
   array('foo', 'bar')

@@ -13,8 +13,9 @@ use Ubqos\Bee\Parser\Inline;
 use Ubqos\Bee\Parser\Bee;
 
 /**
- * Parser parses YAML strings to convert them to PHP arrays.
+ * Parser parses Bee strings to convert them to PHP arrays.
  *
+ * Original YAML class by:
  * @author Fabien Potencier <fabien@symfony.com>
  */
 class Parser
@@ -31,7 +32,7 @@ class Parser
     /**
      * Constructor.
      *
-     * @param int $offset The offset of YAML document (used for line numbers in error messages)
+     * @param int $offset The offset of Bee document (used for line numbers in error messages)
      */
     public function __construct($offset = 0)
     {
@@ -39,19 +40,51 @@ class Parser
     }
 
     /**
-     * Parses a YAML string to a PHP value.
+     * Parses a Bee string with multiple sections to a PHP value.
      *
-     * @param string $value A YAML string
-     * @param int    $flags A bit field of PARSE_* constants to customize the YAML parser behavior
+     * @param string $value A Bee string
+     * @param int    $flags A bit field of PARSE_* constants to customize the Bee parser behavior
      *
      * @return mixed A PHP value
      *
-     * @throws ParseException If the YAML is not valid
+     * @throws ParseException If the Bee syntax is not valid
+     */
+    public function parseSections($bees, $flags = 0)
+    {
+        $sections = [];
+
+        // split Bee Sections & Documents
+        foreach (preg_split('/^---( %BEE\:1\.0)?/m', $bees) as $bee) {
+            if (!$bee) {
+                continue;
+            }
+
+            $section = $this->parse($bee, $flags);
+            if (isset($section['id'])) {
+                $sections[$section['id']] = $section;
+            } else {
+                $sections[] = $section;
+            }
+        }
+
+        return $sections;
+
+    }
+
+    /**
+     * Parses a Bee string to a PHP value.
+     *
+     * @param string $value A Bee string
+     * @param int    $flags A bit field of PARSE_* constants to customize the Bee parser behavior
+     *
+     * @return mixed A PHP value
+     *
+     * @throws ParseException If the Bee syntax is not valid
      */
     public function parse($value, $flags = 0)
     {
        if (!preg_match('//u', $value)) {
-            throw new ParseException('The YAML value does not appear to be valid UTF-8.');
+            throw new ParseException('The Bee section does not appear to be valid UTF-8.');
         }
         $this->currentLineNb = -1;
         $this->currentLine = '';
@@ -73,7 +106,7 @@ class Parser
 
             // tab?
             if ("\t" === $this->currentLine[0]) {
-                throw new ParseException('A YAML file cannot contain tabs as indentation.', $this->getRealCurrentLineNb() + 1, $this->currentLine);
+                throw new ParseException('A Bee section cannot contain tabs as indentation.', $this->getRealCurrentLineNb() + 1, $this->currentLine);
             }
 
             $isRef = $mergeNode = false;
@@ -116,7 +149,11 @@ class Parser
                 if ($isRef) {
                     $this->refs[$isRef] = end($data);
                 }
-            } elseif (preg_match('#^(?P<key>'.Inline::REGEX_QUOTED_STRING.'|[^ \'"\[\{].*?) *\:(\s+(?P<value>.+?))?\s*$#u', $this->currentLine, $values) && (false === strpos($values['key'], ' #') || in_array($values['key'][0], array('"', "'")))) {
+            } elseif (
+                preg_match('#^(?P<key>'.Inline::REGEX_QUOTED_STRING.'|[^ \'"\[\{].*?) *\:(\s+(?P<value>.+?))?\s*$#u', $this->currentLine, $values) &&
+                (false === strpos($values['key'], ' #') ||
+                    in_array($values['key'][0], array('"', "'")))
+            ) {
                 if ($context && 'sequence' == $context) {
                     throw new ParseException('You cannot define a mapping item when in a sequence');
                 }
@@ -135,7 +172,7 @@ class Parser
 
                 // Convert float keys to strings, to avoid being converted to integers by PHP
                 if (is_float($key)) {
-                    $key = (string) $key;
+                    $key = (string)$key;
                 }
 
                 if ('<<' === $key) {
@@ -150,7 +187,7 @@ class Parser
                         $refValue = $this->refs[$refName];
 
                         if (!is_array($refValue)) {
-                            throw new ParseException('YAML merge keys used with a scalar value instead of an array.', $this->getRealCurrentLineNb() + 1, $this->currentLine);
+                            throw new ParseException('Bee merge keys used with a scalar value instead of an array.', $this->getRealCurrentLineNb() + 1, $this->currentLine);
                         }
 
                         foreach ($refValue as $key => $value) {
@@ -170,7 +207,7 @@ class Parser
                         $parsed = $parser->parse($value, $flags);
 
                         if (!is_array($parsed)) {
-                            throw new ParseException('YAML merge keys used with a scalar value instead of an array.', $this->getRealCurrentLineNb() + 1, $this->currentLine);
+                            throw new ParseException('Bee merge keys used with a scalar value instead of an array.', $this->getRealCurrentLineNb() + 1, $this->currentLine);
                         }
 
                         if (isset($parsed[0])) {
@@ -236,6 +273,29 @@ class Parser
                 if ($isRef) {
                     $this->refs[$isRef] = $data[$key];
                 }
+            } elseif ($this->currentLine === '(') {
+                /*
+                 * always overwrite if in same level we have more (
+                 */
+                $converted = str_replace(
+                    [
+                        "(\n",
+                        "\n)",
+                        "\n",
+                        '(',
+                        ')',
+                    ],
+                    [
+                        '{',
+                        '}',
+                        ', ',
+                        '{',
+                        '}'
+                    ],
+                    trim($value)
+                );
+                $data['@attr'] = $this->parseValue($converted, $flags, $context);
+                return $data;
             } else {
                 // multiple documents are not supported
                 if ('---' === $this->currentLine) {
@@ -333,12 +393,12 @@ class Parser
     }
 
     /**
-     * Returns the next embed block of YAML.
+     * Returns the next embed section of Bee.
      *
      * @param int  $indentation The indent level at which the block is to be read, or null for default
      * @param bool $inSequence  True if the enclosing data structure is a sequence
      *
-     * @return string A YAML string
+     * @return string A Bee string
      *
      * @throws ParseException When indentation problem are detected
      */
@@ -464,10 +524,10 @@ class Parser
     }
 
     /**
-     * Parses a YAML value.
+     * Parses a Bee value.
      *
-     * @param string $value   A YAML value
-     * @param int    $flags   A bit field of PARSE_* constants to customize the YAML parser behavior
+     * @param string $value   A Bee value
+     * @param int    $flags   A bit field of PARSE_* constants to customize the Bee parser behavior
      * @param string $context The parser context (either sequence or mapping)
      *
      * @return mixed A PHP value
@@ -505,7 +565,16 @@ class Parser
         try {
             $parsedValue = Inline::parse($value, $flags, $this->refs);
 
-            if ('mapping' === $context && '"' !== $value[0] && "'" !== $value[0] && '[' !== $value[0] && '{' !== $value[0] && '!' !== $value[0] && false !== strpos($parsedValue, ': ')) {
+            if (
+                'mapping' === $context &&
+                '"' !== $value[0] &&
+                "'" !== $value[0] &&
+                '[' !== $value[0] &&
+                '{' !== $value[0] &&
+                '(' !== $value[0] &&
+                '!' !== $value[0] &&
+                false !== strpos($parsedValue, ': ')
+            ) {
                 throw new ParseException('A colon cannot be used in an unquoted mapping value.');
             }
 
@@ -689,19 +758,19 @@ class Parser
     }
 
     /**
-     * Cleanups a YAML string to be parsed.
+     * Cleanups a Bee string to be parsed.
      *
-     * @param string $value The input YAML string
+     * @param string $value The input Bee string
      *
-     * @return string A cleaned up YAML string
+     * @return string A cleaned up Bee string
      */
     private function cleanup($value)
     {
         $value = str_replace(array("\r\n", "\r"), "\n", $value);
 
-        // strip YAML header
+        // strip Bee header
         $count = 0;
-        $value = preg_replace('#^\%YAML[: ][\d\.]+.*\n#u', '', $value, -1, $count);
+        $value = preg_replace('#^\%BEE[: ][\d\.]+.*\n#u', '', $value, -1, $count);
         $this->offset += $count;
 
         // remove leading comments

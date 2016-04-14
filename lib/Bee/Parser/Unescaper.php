@@ -12,7 +12,7 @@ use Ubqos\Bee\Parser\Exception\ParseException;
 
 /**
  * Unescaper encapsulates unescaping rules for single and double-quoted
- * YAML strings.
+ * Bee strings.
  *
  * @author Matthew Lewinski <matthew@lewinski.org>
  *

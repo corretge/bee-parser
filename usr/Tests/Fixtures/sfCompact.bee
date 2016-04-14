@@ -2,7 +2,7 @@
 test: Compact notation
 brief: |
     Compact notation for sets of mappings with single element
-yaml: |
+bee: |
   ---
   # products purchased
   - item    : Super Hoop
@@ -33,7 +33,7 @@ php: |
 test: Compact notation combined with inline notation
 brief: |
     Combinations of compact and inline notation are allowed
-yaml: |
+bee: |
   ---
   items:
     - { item: Super Hoop, quantity: 1 }
@@ -55,7 +55,7 @@ php: |
 test: Compact notation
 brief: |
     Compact notation for sets of mappings with single element
-yaml: |
+bee: |
   ---
   # products purchased
   - item    : Super Hoop
@@ -86,7 +86,7 @@ php: |
 test: Compact notation combined with inline notation
 brief: |
     Combinations of compact and inline notation are allowed
-yaml: |
+bee: |
   ---
   items:
     - { item: Super Hoop, quantity: 1 }
@@ -108,7 +108,7 @@ php: |
 test: Compact notation
 brief: |
     Compact notation for sets of mappings with single element
-yaml: |
+bee: |
   ---
   # products purchased
   - item    : Super Hoop
@@ -139,7 +139,7 @@ php: |
 test: Compact notation combined with inline notation
 brief: |
     Combinations of compact and inline notation are allowed
-yaml: |
+bee: |
   ---
   items:
     - { item: Super Hoop, quantity: 1 }

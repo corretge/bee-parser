@@ -1,7 +1,7 @@
 --- %BEE:1.0
 test: Sequence of scalars
 spec: 2.1
-yaml: |
+bee: |
   - Mark McGwire
   - Sammy Sosa
   - Ken Griffey
@@ -10,7 +10,7 @@ php: |
 ---
 test: Mapping of scalars to scalars
 spec: 2.2
-yaml: |
+bee: |
   hr:  65
   avg: 0.278
   rbi: 147
@@ -19,7 +19,7 @@ php: |
 ---
 test: Mapping of scalars to sequences
 spec: 2.3
-yaml: |
+bee: |
     american:
        - Boston Red Sox
        - Detroit Tigers
@@ -39,7 +39,7 @@ php: |
 ---
 test: Sequence of mappings
 spec: 2.4
-yaml: |
+bee: |
     -
       name: Mark McGwire
       hr:   65
@@ -56,7 +56,7 @@ php: |
 ---
 test: Sequence of sequences
 spec: 2.5
-yaml: |
+bee: |
   - [ name         , hr , avg   ]
   - [ Mark McGwire , 65 , 0.278 ]
   - [ Sammy Sosa   , 63 , 0.288 ]
@@ -70,7 +70,7 @@ php: |
 test: Mapping of mappings
 todo: true
 spec: 2.6
-yaml: |
+bee: |
   Mark McGwire: {hr: 65, avg: 0.278}
   Sammy Sosa: {
       hr: 63,
@@ -86,7 +86,7 @@ php: |
 ---
 test: Single document with two comments
 spec: 2.9
-yaml: |
+bee: |
   hr: # 1998 hr ranking
     - Mark McGwire
     - Sammy Sosa
@@ -102,7 +102,7 @@ php: |
 ---
 test: Node for Sammy Sosa appears twice in this document
 spec: 2.10
-yaml: |
+bee: |
    ---
    hr:
       - Mark McGwire
@@ -121,7 +121,7 @@ php: |
 ---
 test: Sequence key shortcut
 spec: 2.12
-yaml: |
+bee: |
   ---
   # products purchased
   - item    : Super Hoop
@@ -148,7 +148,7 @@ php: |
 ---
 test: Indentation determines scope
 spec: 2.16
-yaml: |
+bee: |
   name: Mark McGwire
   accomplishment: >
      Mark set a major league
@@ -165,7 +165,7 @@ php: |
 ---
 test: Integers
 spec: 2.19
-yaml: |
+bee: |
   canonical: 12345
   decimal: +12,345
   octal: 014
@@ -181,7 +181,7 @@ php: |
 # FIX: spec shows parens around -inf and NaN
 test: Floating point
 spec: 2.20
-yaml: |
+bee: |
   canonical: 1.23015e+3
   exponential: 12.3015e+02
   fixed: 1,230.15
@@ -200,7 +200,7 @@ php: |
 ---
 test: Miscellaneous
 spec: 2.21
-yaml: |
+bee: |
   null: ~
   true: true
   false: false
@@ -216,7 +216,7 @@ php: |
 test: Timestamps
 todo: true
 spec: 2.22
-yaml: |
+bee: |
   canonical: 2001-12-15T02:59:43.1Z
   iso8601:  2001-12-14t21:59:43.10-05:00
   spaced:  2001-12-14 21:59:43.10 -05:00
@@ -232,7 +232,7 @@ php: |
 test: legacy Timestamps test
 todo: true
 spec: legacy D4
-yaml: |
+bee: |
     canonical: 2001-12-15T02:59:43.00Z
     iso8601:  2001-02-28t21:59:43.00-05:00
     spaced:  2001-12-14 21:59:43.00 -05:00
@@ -248,7 +248,7 @@ php: |
 test: Invoice
 dump_skip: true
 spec: 2.27
-yaml: |
+bee: |
   --- !clarkevans.com,2002/^invoice
   invoice: 34843
   date   : 2001-01-23
@@ -297,7 +297,7 @@ php: |
   )
 ---
 test: Throwaway comments
-yaml: |
+bee: |
    ### These are four throwaway comment  ###
 
    ### lines (the second line is empty). ###
@@ -314,7 +314,7 @@ php: |
    )
 ---
 test: Top level mapping
-yaml: |
+bee: |
    # This stream is an example of a top-level mapping.
    invoice : 34843
    date    : 2001-01-23
@@ -327,7 +327,7 @@ php: |
    )
 ---
 test: Explicit typing
-yaml: |
+bee: |
    integer: 12
    also int: ! "12"
    string: !str 12
@@ -335,14 +335,14 @@ php: |
    array( 'integer' => 12, 'also int' => 12, 'string' => '12' )
 ---
 test: Type family under yaml.org
-yaml: |
+bee: |
   # The URI is 'tag:yaml.org,2002:str'
   - !str a Unicode string
 php: |
   array( 'a Unicode string' )
 ---
 test: Overriding anchors
-yaml: |
+bee: |
   anchor : &A001 This scalar has an anchor.
   override : &A001 >
    The alias node below is a
@@ -354,7 +354,7 @@ php: |
     'alias' => "The alias node below is a repeated use of this value.\n" )
 ---
 test: Literal explicit indentation
-yaml: |
+bee: |
    # Explicit indentation must
    # be given in all the three
    # following cases.
@@ -383,7 +383,7 @@ php: |
    )
 ---
 test: Chomping and keep modifiers
-yaml: |
+bee: |
     clipped: |
         This has one newline.
 
@@ -410,7 +410,7 @@ php: |
 ---
 test: Literal combinations
 todo: true
-yaml: |
+bee: |
    empty: |
 
    literal: |
@@ -459,7 +459,7 @@ php: |
 ---
 test: Folded combinations
 todo: true
-yaml: |
+bee: |
    empty: >
 
    one paragraph: >
@@ -527,7 +527,7 @@ php: |
 ---
 test: Single quotes
 todo: true
-yaml: |
+bee: |
    empty: ''
    second: '! : \ etc. can be used freely.'
    third: 'a single quote '' must be escaped.'
@@ -548,7 +548,7 @@ php: |
 ---
 test: Double quotes
 todo: true
-yaml: |
+bee: |
    empty: ""
    second: "! : etc. can be used freely."
    third: "a \" or a \\ must be escaped."
@@ -569,7 +569,7 @@ php: |
 ---
 test: Unquoted strings
 todo: true
-yaml: |
+bee: |
    first: There is no unquoted empty string.
 
    second: 12          ## This is an integer.
@@ -606,7 +606,7 @@ php: |
 ---
 test: Spanning sequences
 todo: true
-yaml: |
+bee: |
    # The following are equal seqs
    # with different identities.
    flow: [ one, two ]
@@ -623,7 +623,7 @@ php: |
    )
 ---
 test: Flow mappings
-yaml: |
+bee: |
    # The following are equal maps
    # with different identities.
    flow: { one: 1, two: 2 }
@@ -638,7 +638,7 @@ php: |
 ---
 test: Representations of 12
 todo: true
-yaml: |
+bee: |
    - 12 # An integer
    # The following scalars
    # are loaded to the
@@ -660,7 +660,7 @@ php: |
 ---
 test: "Null"
 todo: true
-yaml: |
+bee: |
    canonical: ~
 
    english: null
@@ -686,7 +686,7 @@ php: |
    )
 ---
 test: Boolean
-yaml: |
+bee: |
    false: used as key
    logical:  true
    answer: false
@@ -698,7 +698,7 @@ php: |
    )
 ---
 test: Integer
-yaml: |
+bee: |
    canonical: 12345
    decimal: +12,345
    octal: 014
@@ -712,7 +712,7 @@ php: |
    )
 ---
 test: Float
-yaml: |
+bee: |
    canonical: 1.23015e+3
    exponential: 12.3015e+02
    fixed: 1,230.15

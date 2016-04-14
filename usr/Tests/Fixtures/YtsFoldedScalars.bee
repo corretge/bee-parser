@@ -6,7 +6,7 @@ brief: >
     block, in which newlines are preserved
     throughout the block, including the final
     newline.
-yaml: |
+bee: |
     ---
     this: |
         Foo
@@ -18,7 +18,7 @@ test: The '+' indicator
 brief: >
     The '+' indicator says to keep newlines at the end of text
     blocks.
-yaml: |
+bee: |
     normal: |
       extra new lines not kept
 
@@ -42,7 +42,7 @@ brief: >
     The keep indicator will preserve all
     ending newlines, while the chomp indicator
     will strip all ending newlines.
-yaml: |
+bee: |
     clipped: |
         This has one newline.
 
@@ -84,7 +84,7 @@ brief: >
     since the last line of both literal blocks
     contains spaces which extend past the indentation
     level.
-yaml: |
+bee: |
     ---
     this: |
         Foo
@@ -105,7 +105,7 @@ brief: >
     block of text is treated as a folded block, in
     which lines of text separated by a single newline
     are concatenated as a single line.
-yaml: |
+bee: |
     ---
     - apple
     - banana
@@ -127,7 +127,7 @@ brief: >
     Both literal and folded blocks can be
     used in collections, as values in a
     sequence or a mapping.
-yaml: |
+bee: |
     ---
     quote: >
         Mark McGwire's
@@ -144,7 +144,7 @@ test: Three trailing newlines in folded blocks
 brief: >
     The keep and chomp indicators can also
     be applied to folded blocks.
-yaml: |
+bee: |
     clipped: >
         This has one newline.
 

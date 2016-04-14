@@ -2,7 +2,7 @@
 test: One Element Mapping
 brief: |
     A mapping with one key/value pair
-yaml: |
+bee: |
     foo: bar
 php: |
     array('foo' => 'bar')
@@ -10,7 +10,7 @@ php: |
 test: Multi Element Mapping
 brief: |
     More than one key/value pair
-yaml: |
+bee: |
     red: baron
     white: walls
     blue: berries
@@ -25,7 +25,7 @@ test: Values aligned
 brief: |
     Often times human editors of documents will align the values even
     though BEE emitters generally don't.
-yaml: |
+bee: |
     red:   baron
     white: walls
     blue:  berries
@@ -39,7 +39,7 @@ php: |
 test: Colons aligned
 brief: |
     Spaces can come before the ': ' key/value separator.
-yaml: |
+bee: |
     red   : baron
     white : walls
     blue  : berries

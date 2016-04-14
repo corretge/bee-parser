@@ -4,7 +4,7 @@ brief: |
     You can specify a list in BEE by placing each
     member of the list on a new line with an opening
     dash. These lists are called sequences.
-yaml: |
+bee: |
     - apple
     - banana
     - carrot
@@ -16,7 +16,7 @@ brief: |
     You can specify a list in BEE by placing each
     member of the list on a new line with an opening
     dash. These lists are called sequences.
-yaml: |
+bee: |
     - apple
     -
     - carrot
@@ -28,7 +28,7 @@ brief: |
     You can specify a list in BEE by placing each
     member of the list on a new line with an opening
     dash. These lists are called sequences.
-yaml: |
+bee: |
     - apple
     - banana
     -
@@ -40,7 +40,7 @@ brief: |
     You can include a sequence within another
     sequence by giving the sequence an empty
     dash, followed by an indented list.
-yaml: |
+bee: |
     -
      - foo
      - bar
@@ -52,7 +52,7 @@ test: Mixed Sequences
 brief: |
     Sequences can contain any BEE data,
     including strings and other sequences.
-yaml: |
+bee: |
     - apple
     -
      - foo
@@ -68,7 +68,7 @@ brief: |
     Sequences can be nested even deeper, with each
     level of indentation representing a level of
     depth.
-yaml: |
+bee: |
     -
      -
       - uno
@@ -83,7 +83,7 @@ brief: |
     list on a new line, with a colon separating the key
     from its value.  In BEE, this type of list is called
     a mapping.
-yaml: |
+bee: |
     foo: whatever
     bar: stuff
 php: |
@@ -92,7 +92,7 @@ php: |
 test: Sequence in a Mapping
 brief: |
     A value in a mapping can be a sequence.
-yaml: |
+bee: |
     foo: whatever
     bar:
      - uno
@@ -103,7 +103,7 @@ php: |
 test: Nested Mappings
 brief: |
     A value in a mapping can be another mapping.
-yaml: |
+bee: |
     foo: whatever
     bar:
      fruit: apple
@@ -123,7 +123,7 @@ test: Mixed Mapping
 brief: |
     A mapping can contain any assortment
     of mappings and sequences as values.
-yaml: |
+bee: |
     foo: whatever
     bar:
      -
@@ -159,7 +159,7 @@ brief: |
      If you are adding a mapping to a sequence, you
      can place the mapping on the same line as the
      dash as a shortcut.
-yaml: |
+bee: |
      - work on BEE.py:
         - work on Store
 php: |
@@ -171,7 +171,7 @@ brief: |
      The dash in a sequence counts as indentation, so
      you can add a sequence inside of a mapping without
      needing spaces as indentation.
-yaml: |
+bee: |
      allow:
      - 'localhost'
      - '%.sourceforge.net'
@@ -185,7 +185,7 @@ brief: |
      A merge key ('<<') can be used in a mapping to insert other mappings.  If
      the value associated with the merge key is a mapping, each of its key/value
      pairs is inserted into the current mapping.
-yaml: |
+bee: |
      mapping:
        name: Joe
        job: Accountant

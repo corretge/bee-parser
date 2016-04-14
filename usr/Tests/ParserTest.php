@@ -28,9 +28,10 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getDataFormSpecifications
      */
-    public function testSpecifications($file, $expected, $yaml, $comment)
+    public function testSpecifications($file, $expected, $bee, $comment)
     {
-        $this->assertEquals($expected, var_export($this->parser->parse($yaml), true), $comment);
+        $actual = var_export($this->parser->parse($bee), true);
+        $this->assertEquals($expected, $actual, $comment);
     }
 
     public function getDataFormSpecifications()
@@ -41,21 +42,21 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $tests = array();
         $files = $parser->parse(file_get_contents($path.'/index.bee'));
         foreach ($files as $file) {
-            $yamls = file_get_contents($path.'/'.$file.'.bee');
+            $bees = file_get_contents($path.'/'.$file.'.bee');
 
-            // split YAMLs documents
-            foreach (preg_split('/^---( %BEE\:1\.0)?/m', $yamls) as $yaml) {
-                if (!$yaml) {
+            // split Bee Sections & Documents
+            foreach (preg_split('/^---( %BEE\:1\.0)?/m', $bees) as $bee) {
+                if (!$bee) {
                     continue;
                 }
 
-                $test = $parser->parse($yaml);
+                $test = $parser->parse($bee);
                 if (isset($test['todo']) && $test['todo']) {
                     // TODO
                 } else {
                     eval('$expected = '.trim($test['php']).';');
 
-                    $tests[] = array($file, var_export($expected, true), $test['yaml'], $test['test']);
+                    $tests[] = array($file, var_export($expected, true), $test['bee'], $test['test']);
                 }
             }
         }
@@ -65,42 +66,42 @@ class ParserTest extends \PHPUnit_Framework_TestCase
 
     public function testTabsInYaml()
     {
-        // test tabs in YAML
-        $yamls = array(
+        // test tabs in Bee
+        $bees = array(
             "foo:\n	bar",
             "foo:\n 	bar",
             "foo:\n	 bar",
             "foo:\n 	 bar",
         );
 
-        foreach ($yamls as $yaml) {
+        foreach ($bees as $bee) {
             try {
-                $content = $this->parser->parse($yaml);
+                $content = $this->parser->parse($bee);
 
-                $this->fail('YAML files must not contain tabs');
+                $this->fail('Bee sections must not contain tabs');
             } catch (\Exception $e) {
-                $this->assertInstanceOf('\Exception', $e, 'YAML files must not contain tabs');
-                $this->assertEquals('A YAML file cannot contain tabs as indentation at line 2 (near "'.strpbrk($yaml, "\t").'").', $e->getMessage(), 'YAML files must not contain tabs');
+                $this->assertInstanceOf('\Exception', $e, 'Bee sections must not contain tabs');
+                $this->assertEquals('A Bee section cannot contain tabs as indentation at line 2 (near "'.strpbrk($bee, "\t").'").', $e->getMessage(), ' Bee string must not contain tabs');
             }
         }
     }
 
     public function testEndOfTheDocumentMarker()
     {
-        $yaml = <<<'EOF'
---- %YAML:1.0
+        $bee = <<<'EOF'
+--- %BEE:1.0
 foo
 ...
 EOF;
 
-        $this->assertEquals('foo', $this->parser->parse($yaml));
+        $this->assertEquals('foo', $this->parser->parse($bee));
     }
 
     public function getBlockChompingTests()
     {
         $tests = array();
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: |-
     one
     two
@@ -113,9 +114,9 @@ EOF;
             'foo' => "one\ntwo",
             'bar' => "one\ntwo",
         );
-        $tests['Literal block chomping strip with single trailing newline'] = array($expected, $yaml);
+        $tests['Literal block chomping strip with single trailing newline'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: |-
     one
     two
@@ -130,17 +131,17 @@ EOF;
             'foo' => "one\ntwo",
             'bar' => "one\ntwo",
         );
-        $tests['Literal block chomping strip with multiple trailing newlines'] = array($expected, $yaml);
+        $tests['Literal block chomping strip with multiple trailing newlines'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 {}
 
 
 EOF;
         $expected = array();
-        $tests['Literal block chomping strip with multiple trailing newlines after a 1-liner'] = array($expected, $yaml);
+        $tests['Literal block chomping strip with multiple trailing newlines after a 1-liner'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: |-
     one
     two
@@ -152,9 +153,9 @@ EOF;
             'foo' => "one\ntwo",
             'bar' => "one\ntwo",
         );
-        $tests['Literal block chomping strip without trailing newline'] = array($expected, $yaml);
+        $tests['Literal block chomping strip without trailing newline'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: |
     one
     two
@@ -167,9 +168,9 @@ EOF;
             'foo' => "one\ntwo\n",
             'bar' => "one\ntwo\n",
         );
-        $tests['Literal block chomping clip with single trailing newline'] = array($expected, $yaml);
+        $tests['Literal block chomping clip with single trailing newline'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: |
     one
     two
@@ -184,9 +185,9 @@ EOF;
             'foo' => "one\ntwo\n",
             'bar' => "one\ntwo\n",
         );
-        $tests['Literal block chomping clip with multiple trailing newlines'] = array($expected, $yaml);
+        $tests['Literal block chomping clip with multiple trailing newlines'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: |
     one
     two
@@ -198,9 +199,9 @@ EOF;
             'foo' => "one\ntwo\n",
             'bar' => "one\ntwo",
         );
-        $tests['Literal block chomping clip without trailing newline'] = array($expected, $yaml);
+        $tests['Literal block chomping clip without trailing newline'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: |+
     one
     two
@@ -213,9 +214,9 @@ EOF;
             'foo' => "one\ntwo\n",
             'bar' => "one\ntwo\n",
         );
-        $tests['Literal block chomping keep with single trailing newline'] = array($expected, $yaml);
+        $tests['Literal block chomping keep with single trailing newline'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: |+
     one
     two
@@ -230,9 +231,9 @@ EOF;
             'foo' => "one\ntwo\n\n",
             'bar' => "one\ntwo\n\n",
         );
-        $tests['Literal block chomping keep with multiple trailing newlines'] = array($expected, $yaml);
+        $tests['Literal block chomping keep with multiple trailing newlines'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: |+
     one
     two
@@ -244,9 +245,9 @@ EOF;
             'foo' => "one\ntwo\n",
             'bar' => "one\ntwo",
         );
-        $tests['Literal block chomping keep without trailing newline'] = array($expected, $yaml);
+        $tests['Literal block chomping keep without trailing newline'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: >-
     one
     two
@@ -259,9 +260,9 @@ EOF;
             'foo' => 'one two',
             'bar' => 'one two',
         );
-        $tests['Folded block chomping strip with single trailing newline'] = array($expected, $yaml);
+        $tests['Folded block chomping strip with single trailing newline'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: >-
     one
     two
@@ -276,9 +277,9 @@ EOF;
             'foo' => 'one two',
             'bar' => 'one two',
         );
-        $tests['Folded block chomping strip with multiple trailing newlines'] = array($expected, $yaml);
+        $tests['Folded block chomping strip with multiple trailing newlines'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: >-
     one
     two
@@ -290,9 +291,9 @@ EOF;
             'foo' => 'one two',
             'bar' => 'one two',
         );
-        $tests['Folded block chomping strip without trailing newline'] = array($expected, $yaml);
+        $tests['Folded block chomping strip without trailing newline'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: >
     one
     two
@@ -305,9 +306,9 @@ EOF;
             'foo' => "one two\n",
             'bar' => "one two\n",
         );
-        $tests['Folded block chomping clip with single trailing newline'] = array($expected, $yaml);
+        $tests['Folded block chomping clip with single trailing newline'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: >
     one
     two
@@ -322,9 +323,9 @@ EOF;
             'foo' => "one two\n",
             'bar' => "one two\n",
         );
-        $tests['Folded block chomping clip with multiple trailing newlines'] = array($expected, $yaml);
+        $tests['Folded block chomping clip with multiple trailing newlines'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: >
     one
     two
@@ -336,9 +337,9 @@ EOF;
             'foo' => "one two\n",
             'bar' => 'one two',
         );
-        $tests['Folded block chomping clip without trailing newline'] = array($expected, $yaml);
+        $tests['Folded block chomping clip without trailing newline'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: >+
     one
     two
@@ -351,9 +352,9 @@ EOF;
             'foo' => "one two\n",
             'bar' => "one two\n",
         );
-        $tests['Folded block chomping keep with single trailing newline'] = array($expected, $yaml);
+        $tests['Folded block chomping keep with single trailing newline'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: >+
     one
     two
@@ -368,9 +369,9 @@ EOF;
             'foo' => "one two\n\n",
             'bar' => "one two\n\n",
         );
-        $tests['Folded block chomping keep with multiple trailing newlines'] = array($expected, $yaml);
+        $tests['Folded block chomping keep with multiple trailing newlines'] = array($expected, $bee);
 
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: >+
     one
     two
@@ -382,7 +383,7 @@ EOF;
             'foo' => "one two\n",
             'bar' => 'one two',
         );
-        $tests['Folded block chomping keep without trailing newline'] = array($expected, $yaml);
+        $tests['Folded block chomping keep without trailing newline'] = array($expected, $bee);
 
         return $tests;
     }
@@ -390,9 +391,9 @@ EOF;
     /**
      * @dataProvider getBlockChompingTests
      */
-    public function testBlockChomping($expected, $yaml)
+    public function testBlockChomping($expected, $bee)
     {
-        $this->assertSame($expected, $this->parser->parse($yaml));
+        $this->assertSame($expected, $this->parser->parse($bee));
     }
 
     /**
@@ -402,7 +403,7 @@ EOF;
      */
     public function testBlockLiteralWithLeadingNewlines()
     {
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo: |-
 
 
@@ -413,7 +414,7 @@ EOF;
             'foo' => "\n\nbar",
         );
 
-        $this->assertSame($expected, $this->parser->parse($yaml));
+        $this->assertSame($expected, $this->parser->parse($bee));
     }
 
     public function testObjectSupportEnabled()
@@ -428,37 +429,37 @@ EOF;
     /**
      * @dataProvider getObjectForMapTests
      */
-    public function testObjectForMap($yaml, $expected)
+    public function testObjectForMap($bee, $expected)
     {
-        $this->assertEquals($expected, $this->parser->parse($yaml, Bee::PARSE_OBJECT_FOR_MAP));
+        $this->assertEquals($expected, $this->parser->parse($bee, Bee::PARSE_OBJECT_FOR_MAP));
     }
 
     public function getObjectForMapTests()
     {
         $tests = array();
 
-        $yaml = <<<EOF
+        $bee = <<<EOF
 foo:
     fiz: [cat]
 EOF;
         $expected = new \stdClass();
         $expected->foo = new \stdClass();
         $expected->foo->fiz = array('cat');
-        $tests['mapping'] = array($yaml, $expected);
+        $tests['mapping'] = array($bee, $expected);
 
-        $yaml = '{ "foo": "bar", "fiz": "cat" }';
+        $bee = '{ "foo": "bar", "fiz": "cat" }';
         $expected = new \stdClass();
         $expected->foo = 'bar';
         $expected->fiz = 'cat';
-        $tests['inline-mapping'] = array($yaml, $expected);
+        $tests['inline-mapping'] = array($bee, $expected);
 
-        $yaml = "foo: bar\nbaz: foobar";
+        $bee = "foo: bar\nbaz: foobar";
         $expected = new \stdClass();
         $expected->foo = 'bar';
         $expected->baz = 'foobar';
-        $tests['object-for-map-is-applied-after-parsing'] = array($yaml, $expected);
+        $tests['object-for-map-is-applied-after-parsing'] = array($bee, $expected);
 
-        $yaml = <<<EOT
+        $bee = <<<EOT
 array:
   - key: one
   - key: two
@@ -469,36 +470,36 @@ EOT;
         $expected->array[0]->key = 'one';
         $expected->array[1] = new \stdClass();
         $expected->array[1]->key = 'two';
-        $tests['nest-map-and-sequence'] = array($yaml, $expected);
+        $tests['nest-map-and-sequence'] = array($bee, $expected);
 
-        $yaml = <<<YAML
+        $bee = <<<Bee
 map:
   1: one
   2: two
-YAML;
+Bee;
         $expected = new \stdClass();
         $expected->map = new \stdClass();
         $expected->map->{1} = 'one';
         $expected->map->{2} = 'two';
-        $tests['numeric-keys'] = array($yaml, $expected);
+        $tests['numeric-keys'] = array($bee, $expected);
 
-        $yaml = <<<YAML
+        $bee = <<<Bee
 map:
   0: one
   1: two
-YAML;
+Bee;
         $expected = new \stdClass();
         $expected->map = new \stdClass();
         $expected->map->{0} = 'one';
         $expected->map->{1} = 'two';
-        $tests['zero-indexed-numeric-keys'] = array($yaml, $expected);
+        $tests['zero-indexed-numeric-keys'] = array($bee, $expected);
 
         return $tests;
     }
 
     public function invalidDumpedObjectProvider()
     {
-        $yamlTag = <<<EOF
+        $beeTag = <<<EOF
 foo: !!php/object:O:30:"Symfony\Tests\Component\Yaml\B":1:{s:1:"b";s:3:"foo";}
 bar: 1
 EOF;
@@ -507,7 +508,7 @@ foo: !php/object:O:30:"Symfony\Tests\Component\Yaml\B":1:{s:1:"b";s:3:"foo";}
 bar: 1
 EOF;
         return array(
-            'yaml-tag' => array($yamlTag),
+            'yaml-tag' => array($beeTag),
             'local-tag' => array($localTag),
         );
     }
@@ -516,9 +517,9 @@ EOF;
      * @dataProvider invalidDumpedObjectProvider
      * @expectedException \Ubqos\Bee\Parser\Exception\ParseException
      */
-    public function testObjectsSupportDisabledWithExceptions($yaml)
+    public function testObjectsSupportDisabledWithExceptions($bee)
     {
-        $this->parser->parse($yaml, Bee::PARSE_EXCEPTION_ON_INVALID_TYPE);
+        $this->parser->parse($bee, Bee::PARSE_EXCEPTION_ON_INVALID_TYPE);
     }
 
     /**
@@ -526,15 +527,15 @@ EOF;
      */
     public function testNonUtf8Exception()
     {
-        $yamls = array(
+        $bees = array(
             iconv('UTF-8', 'ISO-8859-1', "foo: 'äöüß'"),
             iconv('UTF-8', 'ISO-8859-15', "euro: '€'"),
             iconv('UTF-8', 'CP1252', "cp1252: '©ÉÇáñ'"),
         );
 
-        foreach ($yamls as $yaml) {
+        foreach ($bees as $bee) {
             try {
-                $this->parser->parse($yaml);
+                $this->parser->parse($bee);
 
                 $this->fail('charsets other than UTF-8 are rejected.');
             } catch (\Exception $e) {
@@ -548,7 +549,7 @@ EOF;
      */
     public function testUnindentedCollectionException()
     {
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 
 collection:
 -item1
@@ -557,7 +558,7 @@ collection:
 
 EOF;
 
-        $this->parser->parse($yaml);
+        $this->parser->parse($bee);
     }
 
     /**
@@ -565,7 +566,7 @@ EOF;
      */
     public function testShortcutKeyUnindentedCollectionException()
     {
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 
 collection:
 -  key: foo
@@ -573,7 +574,7 @@ collection:
 
 EOF;
 
-        $this->parser->parse($yaml);
+        $this->parser->parse($bee);
     }
 
     /**
@@ -640,7 +641,7 @@ EOF
 
     /**
      * > It is an error for two equal keys to appear in the same mapping node.
-     * > In such a case the YAML processor may continue, ignoring the second
+     * > In such a case the Bee processor may continue, ignoring the second
      * > `key: value` pair and issuing an appropriate warning. This strategy
      * > preserves a consistent information model for one-pass and random access
      * > applications.
@@ -832,18 +833,18 @@ EOF
 
     public function testYamlDirective()
     {
-        $yaml = <<<'EOF'
-%YAML 1.2
+        $bee = <<<'EOF'
+%BEE 1.2
 ---
 foo: 1
 bar: 2
 EOF;
-        $this->assertEquals(array('foo' => 1, 'bar' => 2), $this->parser->parse($yaml));
+        $this->assertEquals(array('foo' => 1, 'bar' => 2), $this->parser->parse($bee));
     }
 
     public function testFloatKeys()
     {
-        $yaml = <<<'EOF'
+        $bee = <<<'EOF'
 foo:
     1.2: "bar"
     1.3: "baz"
@@ -856,7 +857,7 @@ EOF;
             ),
         );
 
-        $this->assertEquals($expected, $this->parser->parse($yaml));
+        $this->assertEquals($expected, $this->parser->parse($bee));
     }
 
     /**
@@ -865,36 +866,36 @@ EOF;
      */
     public function testColonInMappingValueException()
     {
-        $yaml = <<<EOF
+        $bee = <<<EOF
 foo: bar: baz
 EOF;
 
-        $this->parser->parse($yaml);
+        $this->parser->parse($bee);
     }
 
     public function testColonInMappingValueExceptionNotTriggeredByColonInComment()
     {
-        $yaml = <<<EOT
+        $bee = <<<EOT
 foo:
     bar: foobar # Note: a comment after a colon
 EOT;
 
-        $this->assertSame(array('foo' => array('bar' => 'foobar')), $this->parser->parse($yaml));
+        $this->assertSame(array('foo' => array('bar' => 'foobar')), $this->parser->parse($bee));
     }
 
     /**
      * @dataProvider getCommentLikeStringInScalarBlockData
      */
-    public function testCommentLikeStringsAreNotStrippedInBlockScalars($yaml, $expectedParserResult)
+    public function testCommentLikeStringsAreNotStrippedInBlockScalars($bee, $expectedParserResult)
     {
-        $this->assertSame($expectedParserResult, $this->parser->parse($yaml));
+        $this->assertSame($expectedParserResult, $this->parser->parse($bee));
     }
 
     public function getCommentLikeStringInScalarBlockData()
     {
         $tests = array();
 
-        $yaml = <<<'EOT'
+        $bee = <<<'EOT'
 pages:
     -
         title: some title
@@ -928,9 +929,9 @@ EOT
                 ),
             ),
         );
-        $tests[] = array($yaml, $expected);
+        $tests[] = array($bee, $expected);
 
-        $yaml = <<<'EOT'
+        $bee = <<<'EOT'
 test: |
     foo
     # bar
@@ -972,9 +973,9 @@ EOT
                 ),
             ),
         );
-        $tests[] = array($yaml, $expected);
+        $tests[] = array($bee, $expected);
 
-        $yaml = <<<EOT
+        $bee = <<<EOT
 foo:
   bar:
     scalar-block: >
@@ -994,9 +995,9 @@ EOT;
                 ),
             ),
         );
-        $tests[] = array($yaml, $expected);
+        $tests[] = array($bee, $expected);
 
-        $yaml = <<<'EOT'
+        $bee = <<<'EOT'
 a:
     b: hello
 #    c: |
@@ -1010,14 +1011,14 @@ EOT;
                 'd' => 'hello',
             ),
         );
-        $tests[] = array($yaml, $expected);
+        $tests[] = array($bee, $expected);
 
         return $tests;
     }
 
     public function testBlankLinesAreParsedAsNewLinesInFoldedBlocks()
     {
-        $yaml = <<<EOT
+        $bee = <<<EOT
 test: >
     <h2>A heading</h2>
 
@@ -1035,13 +1036,13 @@ EOT;
 EOT
                 ,
             ),
-            $this->parser->parse($yaml)
+            $this->parser->parse($bee)
         );
     }
 
     public function testAdditionallyIndentedLinesAreParsedAsNewLinesInFoldedBlocks()
     {
-        $yaml = <<<EOT
+        $bee = <<<EOT
 test: >
     <h2>A heading</h2>
 
@@ -1062,7 +1063,7 @@ EOT;
 EOT
                 ,
             ),
-            $this->parser->parse($yaml)
+            $this->parser->parse($bee)
         );
     }
 

@@ -16,17 +16,17 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getTestsForParse
      */
-    public function testParse($yaml, $value)
+    public function testParse($bee, $value)
     {
-        $this->assertSame($value, Inline::parse($yaml), sprintf('::parse() converts an inline YAML to a PHP structure (%s)', $yaml));
+        $this->assertSame($value, Inline::parse($bee), sprintf('::parse() converts an inline Bee to a PHP structure (%s)', $bee));
     }
 
     /**
      * @dataProvider getTestsForParseWithMapObjects
      */
-    public function testParseWithMapObjects($yaml, $value)
+    public function testParseWithMapObjects($bee, $value)
     {
-        $actual = Inline::parse($yaml, Bee::PARSE_OBJECT_FOR_MAP);
+        $actual = Inline::parse($bee, Bee::PARSE_OBJECT_FOR_MAP);
 
         $this->assertSame(serialize($value), serialize($actual));
     }
@@ -34,9 +34,9 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getTestsForDump
      */
-    public function testDump($yaml, $value)
+    public function testDump($bee, $value)
     {
-        $this->assertEquals($yaml, Inline::dump($value), sprintf('::dump() converts a PHP structure to an inline YAML (%s)', $yaml));
+        $this->assertEquals($bee, Inline::dump($value), sprintf('::dump() converts a PHP structure to an inline Bee (%s)', $bee));
 
         $this->assertSame($value, Inline::parse(Inline::dump($value)), 'check consistency');
     }
@@ -139,9 +139,9 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getDataForParseReferences
      */
-    public function testParseReferences($yaml, $expected)
+    public function testParseReferences($bee, $expected)
     {
-        $this->assertSame($expected, Inline::parse($yaml, 0, array('var' => 'var-value')));
+        $this->assertSame($expected, Inline::parse($bee, 0, array('var' => 'var-value')));
     }
 
     public function getDataForParseReferences()
@@ -428,22 +428,22 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider getTimestampTests
      */
-    public function testParseTimestampAsUnixTimestampByDefault($yaml, $year, $month, $day, $hour, $minute, $second)
+    public function testParseTimestampAsUnixTimestampByDefault($bee, $year, $month, $day, $hour, $minute, $second)
     {
-        $this->assertSame(gmmktime($hour, $minute, $second, $month, $day, $year), Inline::parse($yaml));
+        $this->assertSame(gmmktime($hour, $minute, $second, $month, $day, $year), Inline::parse($bee));
     }
 
     /**
      * @dataProvider getTimestampTests
      */
-    public function testParseTimestampAsDateTimeObject($yaml, $year, $month, $day, $hour, $minute, $second)
+    public function testParseTimestampAsDateTimeObject($bee, $year, $month, $day, $hour, $minute, $second)
     {
-        $expected = new \DateTime($yaml);
+        $expected = new \DateTime($bee);
         $expected->setTimeZone(new \DateTimeZone('UTC'));
         $expected->setDate($year, $month, $day);
         $expected->setTime($hour, $minute, $second);
 
-        $this->assertEquals($expected, Inline::parse($yaml, Bee::PARSE_DATETIME));
+        $this->assertEquals($expected, Inline::parse($bee, Bee::PARSE_DATETIME));
     }
 
     public function getTimestampTests()

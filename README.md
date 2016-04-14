@@ -17,7 +17,6 @@ but without backward compatibility.
 
 ## Roadmap
 
--
-- Add arguments.
+- Add arguments in one line.
 
 

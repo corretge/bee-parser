@@ -1,0 +1,45 @@
+---
+test: Basic Attributes
+brief: |
+    Two attributes
+bee: |
+    project:
+        (
+            foo2: bar2
+            bar2: foo2
+        )
+php: |
+    [
+     'project' => [
+        '@attr' => [
+            'foo2' => 'bar2',
+            'bar2' => 'foo2'
+        ]
+     ]
+    ]
+---
+test: Advanced Attributes
+brief: |
+    Two attributes
+bee: |
+    project:
+        (
+            foo2: bar2
+            bar2: foo2
+        )
+        bar3: foo3
+    foo1: bar1
+    bar1: foo1
+php: |
+    [
+     'project' => [
+        '@attr' => [
+            'foo2' => 'bar2',
+            'bar2' => 'foo2'
+        ],
+        'bar3' => 'foo3',
+     ],
+     'foo1' => 'bar1',
+     'bar1' => 'foo1'
+    ]
+

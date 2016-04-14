@@ -5,7 +5,7 @@ brief: >
     alphabetic or numeric character is a string,
     unless it belongs to one of the groups below
     (such as an Integer or Time).
-yaml: |
+bee: |
     String
 php: |
     'String'
@@ -17,7 +17,7 @@ brief: >
     punctuation characters, including the
     period, dash, space, quotes, exclamation, and
     question mark.
-yaml: |
+bee: |
     - What's Yaml?
     - It's for writing data structures in plain text.
     - And?
@@ -38,7 +38,7 @@ test: Indicators in Strings
 brief: >
     Be careful using indicators in strings.  In particular,
     the comma, colon, and pound sign must be used carefully.
-yaml: |
+bee: |
     the colon followed by space is an indicator: but is a string:right here
     same for the pound sign: here we have it#in a string
     the comma can, honestly, be used in most cases: [ but not in, inline collections ]
@@ -53,7 +53,7 @@ test: Forcing Strings
 brief: >
     Any BEE type can be forced into a string using the
     explicit !str method.
-yaml: |
+bee: |
     date string: !str 2001-08-01
     number string: !str 192
 php: |
@@ -69,7 +69,7 @@ brief: >
     freely.  Inside single quotes, you can represent a single
     quote in your string by using two single quotes next to
     each other.
-yaml: |
+bee: |
     all my favorite symbols: '#:!/%.)'
     a few i hate: '&(*'
     why do i hate them?: 'it''s very hard to explain'
@@ -87,7 +87,7 @@ brief: >
     Enclosing strings in double quotes allows you
     to use escapings to represent ASCII and
     Unicode characters.
-yaml: |
+bee: |
     i know where i want my line breaks: "one here\nand another here\n"
 php: |
     array(
@@ -101,7 +101,7 @@ brief: >
     carried on to new lines in your BEE document.
     They must be indented a step and indentation
     is interpreted as a single space.
-yaml: |
+bee: |
     i want a long string: "so i'm going to
       let it go on and on to other lines
       until i end it with a quote."
@@ -117,7 +117,7 @@ todo: true
 brief: >
     Unquoted strings may also span multiple lines, if they
     are free of BEE space indicators and indented.
-yaml: |
+bee: |
     - My little toe is broken in two places;
     - I'm crazy to have skied this way;
     - I'm not the craziest he's seen, since there was always the German guy
@@ -144,7 +144,7 @@ php: |
 test: 'Null'
 brief: >
     You can use the tilde '~' character for a null value.
-yaml: |
+bee: |
     name: Mr. Show
     hosted by: Bob and David
     date of next season: ~
@@ -158,7 +158,7 @@ php: |
 test: Boolean
 brief: >
     You can use 'true' and 'false' for Boolean values.
-yaml: |
+bee: |
     Is Gus a Liar?: true
     Do I rely on Gus for Sustenance?: false
 php: |
@@ -173,7 +173,7 @@ brief: >
     An integer is a series of numbers, optionally
     starting with a positive or negative sign.  Integers
     may also contain commas for readability.
-yaml: |
+bee: |
     zero: 0
     simple: 12
     one-thousand: 1,000
@@ -189,7 +189,7 @@ php: |
 test: Integers as Map Keys
 brief: >
     An integer can be used a dictionary key.
-yaml: |
+bee: |
     1: one
     2: two
     3: three
@@ -206,7 +206,7 @@ brief: >
      Floats are represented by numbers with decimals,
      allowing for scientific notation, as well as
      positive and negative infinity and "not a number."
-yaml: |
+bee: |
      a simple float: 2.00
      larger float: 1,000.09
      scientific notation: 1.00009e+3
@@ -224,7 +224,7 @@ brief: >
     ISO8601 format, or a variation which
     allows spaces between the date, time and
     time zone.
-yaml: |
+bee: |
     iso8601: 2001-12-14t21:59:43.10-05:00
     space separated: 2001-12-14 21:59:43.10 -05:00
 php: |
@@ -238,7 +238,7 @@ todo: true
 brief: >
     A date can be represented by its year,
     month and day in ISO8601 order.
-yaml: |
+bee: |
     1976-07-31
 php: |
     date( 1976, 7, 31 )

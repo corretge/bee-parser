@@ -3,7 +3,7 @@ test: Missing value for hash item
 todo: true
 brief: |
     Third item in this hash doesn't have a value
-yaml: |
+bee: |
     okay: value
     also okay: ~
     causes error because no value specified
@@ -17,7 +17,7 @@ brief: |
     in the indentation check.  It was allowing the BEE
     below.
 # This is actually valid BEE now. Someone should tell showell.
-yaml: |
+bee: |
     foo:
     firstline: 1
     secondline: 2

@@ -10,8 +10,9 @@ namespace Ubqos\Bee\Parser;
 
 /**
  * Escaper encapsulates escaping rules for single and double-quoted
- * YAML strings.
+ * Bee strings.
  *
+ * Original YAML class by:
  * @author Matthew Lewinski <matthew@lewinski.org>
  *
  * @internal
@@ -39,7 +40,7 @@ class Escaper
                                      '\\N', '\\_', '\\L', '\\P');
 
     /**
-     * Determines if a PHP value would require double quoting in YAML.
+     * Determines if a PHP value would require double quoting in Bee.
      *
      * @param string $value A PHP value
      *
@@ -63,7 +64,7 @@ class Escaper
     }
 
     /**
-     * Determines if a PHP value would require single quoting in YAML.
+     * Determines if a PHP value would require single quoting in Bee.
      *
      * @param string $value A PHP value
      *
@@ -72,13 +73,13 @@ class Escaper
     public static function requiresSingleQuoting($value)
     {
         // Determines if a PHP value is entirely composed of a value that would
-        // require single quoting in YAML.
+        // require single quoting in Bee.
         if (in_array(strtolower($value), array('null', '~', 'true', 'false', 'y', 'n', 'yes', 'no', 'on', 'off'))) {
             return true;
         }
 
         // Determines if the PHP value contains any single characters that would
-        // cause it to require single quoting in YAML.
+        // cause it to require single quoting in Bee.
         return preg_match('/[ \s \' " \: \{ \} \[ \] , & \* \# \?] | \A[ \- ? | < > = ! % @ ` ]/x', $value);
     }
 

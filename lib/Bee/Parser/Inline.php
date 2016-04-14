@@ -12,8 +12,9 @@ use Ubqos\Bee\Parser\Exception\ParseException;
 use Ubqos\Bee\Parser\Exception\DumpException;
 
 /**
- * Inline implements a YAML parser/dumper for the YAML inline syntax.
+ * Inline implements a Bee parser/dumper for the Bee inline syntax.
  *
+ * Original YAML class by:
  * @author Fabien Potencier <fabien@symfony.com>
  *
  * @internal
@@ -27,13 +28,13 @@ class Inline
     private static $objectForMap = false;
 
     /**
-     * Converts a YAML string to a PHP array.
+     * Converts a Bee string to a PHP array.
      *
-     * @param string $value A YAML string
-     * @param int $flags A bit field of PARSE_* constants to customize the YAML parser behavior
+     * @param string $value A Bee string
+     * @param int $flags A bit field of PARSE_* constants to customize the Bee parser behavior
      * @param array $references Mapping of variable names to values
      *
-     * @return array A PHP array representing the YAML string
+     * @return array A PHP array representing the Bee string
      *
      * @throws ParseException
      */
@@ -85,12 +86,12 @@ class Inline
     }
 
     /**
-     * Dumps a given PHP variable to a YAML string.
+     * Dumps a given PHP variable to a Bee string.
      *
      * @param mixed $value The PHP variable to convert
-     * @param int $flags A bit field of Bee::DUMP_* constants to customize the dumped YAML string
+     * @param int $flags A bit field of Bee::DUMP_* constants to customize the dumped Bee string
      *
-     * @return string The YAML string representing the PHP array
+     * @return string The Bee string representing the PHP array
      *
      * @throws DumpException When trying to dump PHP resource
      */
@@ -99,7 +100,7 @@ class Inline
         switch (true) {
             case is_resource($value):
                 if (Bee::DUMP_EXCEPTION_ON_INVALID_TYPE & $flags) {
-                    throw new DumpException(sprintf('Unable to dump PHP resources in a YAML file ("%s").', get_resource_type($value)));
+                    throw new DumpException(sprintf('Unable to dump PHP resources in a Bee file ("%s").', get_resource_type($value)));
                 }
 
                 return 'null';
@@ -115,7 +116,7 @@ class Inline
                 }
 
                 if (Bee::DUMP_EXCEPTION_ON_INVALID_TYPE & $flags) {
-                    throw new DumpException('Object support when dumping a YAML file has been disabled.');
+                    throw new DumpException('Object support when dumping a Bee file has been disabled.');
                 }
 
                 return 'null';
@@ -166,12 +167,12 @@ class Inline
     }
 
     /**
-     * Dumps a PHP array to a YAML string.
+     * Dumps a PHP array to a Bee string.
      *
      * @param array $value The PHP array to dump
-     * @param int $flags A bit field of Bee::DUMP_* constants to customize the dumped YAML string
+     * @param int $flags A bit field of Bee::DUMP_* constants to customize the dumped Bee string
      *
-     * @return string The YAML string representing the PHP array
+     * @return string The Bee string representing the PHP array
      */
     private static function dumpArray($value, $flags)
     {
@@ -201,7 +202,7 @@ class Inline
     }
 
     /**
-     * Parses a scalar to a YAML string.
+     * Parses a scalar to a Bee string.
      *
      * @param string $scalar
      * @param int $flags
@@ -211,9 +212,9 @@ class Inline
      * @param bool $evaluate
      * @param array $references
      *
-     * @return string A YAML string
+     * @return string A Bee string
      *
-     * @throws ParseException When malformed inline YAML string is parsed
+     * @throws ParseException When malformed inline Bee string is parsed
      *
      * @internal
      */
@@ -243,7 +244,7 @@ class Inline
                 $output = $match[1];
                 $i += strlen($output);
             } else {
-                throw new ParseException(sprintf('Malformed inline YAML string (%s).', $scalar));
+                throw new ParseException(sprintf('Malformed inline Bee string (%s).', $scalar));
             }
 
             // a non-quoted string cannot start with @ or ` (reserved) nor with a scalar indicator (| or >)
@@ -269,19 +270,19 @@ class Inline
     }
 
     /**
-     * Parses a quoted scalar to YAML.
+     * Parses a quoted scalar to Bee.
      *
      * @param string $scalar
      * @param int &$i
      *
-     * @return string A YAML string
+     * @return string A Bee string
      *
-     * @throws ParseException When malformed inline YAML string is parsed
+     * @throws ParseException When malformed inline Bee string is parsed
      */
     private static function parseQuotedScalar($scalar, &$i)
     {
         if (!preg_match('/' . self::REGEX_QUOTED_STRING . '/Au', substr($scalar, $i), $match)) {
-            throw new ParseException(sprintf('Malformed inline YAML string (%s).', substr($scalar, $i)));
+            throw new ParseException(sprintf('Malformed inline Bee string (%s).', substr($scalar, $i)));
         }
 
         $output = substr($match[0], 1, strlen($match[0]) - 2);
@@ -299,16 +300,16 @@ class Inline
     }
 
     /**
-     * Parses a sequence to a YAML string.
+     * Parses a sequence to a Bee string.
      *
      * @param string $sequence
      * @param int $flags
      * @param int &$i
      * @param array $references
      *
-     * @return string A YAML string
+     * @return string A Bee string
      *
-     * @throws ParseException When malformed inline YAML string is parsed
+     * @throws ParseException When malformed inline Bee string is parsed
      */
     private static function parseSequence($sequence, $flags, &$i = 0, $references = array())
     {
@@ -355,20 +356,20 @@ class Inline
             ++$i;
         }
 
-        throw new ParseException(sprintf('Malformed inline YAML string %s', $sequence));
+        throw new ParseException(sprintf('Malformed inline Bee string %s', $sequence));
     }
 
     /**
-     * Parses a mapping to a YAML string.
+     * Parses a mapping to a Bee string.
      *
      * @param string $mapping
      * @param int $flags
      * @param int &$i
      * @param array $references
      *
-     * @return string A YAML string
+     * @return string A Bee string
      *
-     * @throws ParseException When malformed inline YAML string is parsed
+     * @throws ParseException When malformed inline Bee string is parsed
      */
     private static function parseMapping($mapping, $flags, &$i = 0, $references = array())
     {
@@ -384,6 +385,7 @@ class Inline
                     ++$i;
                     continue 2;
                 case '}':
+                case ')':
                     if (self::$objectForMap) {
                         return (object)$output;
                     }
@@ -444,7 +446,7 @@ class Inline
             }
         }
 
-        throw new ParseException(sprintf('Malformed inline YAML string %s', $mapping));
+        throw new ParseException(sprintf('Malformed inline Bee string %s', $mapping));
     }
 
     /**
@@ -454,7 +456,7 @@ class Inline
      * @param int $flags
      * @param array $references
      *
-     * @return string A YAML string
+     * @return string A Bee string
      *
      * @throws ParseException when object parsing support was disabled and the parser detected a PHP object or when a reference could not be resolved
      */
@@ -580,7 +582,7 @@ class Inline
     }
 
     /**
-     * Gets a regex that matches a YAML date.
+     * Gets a regex that matches a Bee date.
      *
      * @return string The regular expression
      *
@@ -605,7 +607,7 @@ EOF;
     }
 
     /**
-     * Gets a regex that matches a YAML number in hexadecimal notation.
+     * Gets a regex that matches a Bee number in hexadecimal notation.
      *
      * @return string
      */
