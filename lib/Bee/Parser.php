@@ -274,6 +274,11 @@ class Parser
                     $this->refs[$isRef] = $data[$key];
                 }
             } elseif ($this->currentLine === '(') {
+                /**
+                 * Process attribute block by attr block
+                 */
+                $attrBlock = strstr($value, ')', true) . ')';
+                $restBlock = mb_substr($value, mb_strlen($attrBlock));
                 /*
                  * always overwrite if in same level we have more (
                  */
@@ -292,9 +297,12 @@ class Parser
                         '{',
                         '}'
                     ],
-                    trim($value)
+                    $attrBlock
                 );
                 $data['@attr'] = $this->parseValue($converted, $flags, $context);
+                if (!empty(trim($restBlock))) {
+                    $data[] = $this->parse($restBlock, $flags);
+                }
                 return $data;
             } else {
                 // multiple documents are not supported

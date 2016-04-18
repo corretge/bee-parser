@@ -26,7 +26,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getDataFormSpecifications
+     * @dataProvider getDataFromSpecifications
      */
     public function testSpecifications($file, $expected, $bee, $comment)
     {
@@ -34,7 +34,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual, $comment);
     }
 
-    public function getDataFormSpecifications()
+    public function getDataFromSpecifications()
     {
         $parser = new Parser();
         $path = __DIR__.'/Fixtures';

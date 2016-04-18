@@ -37,9 +37,231 @@ php: |
             'foo2' => 'bar2',
             'bar2' => 'foo2'
         ],
+     0 => [
         'bar3' => 'foo3',
+        ]
      ],
      'foo1' => 'bar1',
      'bar1' => 'foo1'
+    ]
+---
+test: Attributes converting phing to bee 1
+bee: |
+    project:
+        (
+            name: "Marshal Ramdisk MySQL Tasks and Targets"
+            basedir: "."
+            default: "list"
+        )
+        - tstamp: ~
+        - if:
+            available:
+                (
+                    file: "etc/local-config.ini"
+                )
+            then:
+                property:
+                    (
+                        file: "etc/local-config.ini"
+                        override: false
+                    )
+        - if:
+            available:
+                (
+                    file: "etc/config.ini"
+                )
+            then:
+                property:
+                    (
+                        file: "etc/config.ini"
+                        override: false
+                    )
+        - property:
+            (
+                file: "etc/config.ini"
+                override: false
+            )
+        - target:
+            (
+                name: list
+                description: "List targets"
+            )
+            - exec:
+                (
+                    command: "usr/bin/phing -l"
+                    level: "verbose"
+                    passthru: true
+                )
+            - exec:
+                (
+                    command: "usr/bin/phing -l"
+                    level: "verbose"
+                    passthru: true
+                )
+        - target:
+            (
+                name: "info"
+                description: "Info about the project"
+            )
+            - exec:
+                (
+                    command: "cat README.md"
+                    passthru: true
+                )
+        - import:
+            (
+                file: "hipsotech.marshal.ramdisk.xml"
+            )
+
+php: |
+    [
+      'project' =>
+      [
+        '@attr' =>
+        [
+          'name' => 'Marshal Ramdisk MySQL Tasks and Targets',
+          'basedir' => '.',
+          'default' => 'list',
+        ],
+        0 =>
+        [
+          0 =>
+          [
+            'tstamp' => NULL,
+          ],
+          1 =>
+          [
+            'if' =>
+            [
+              'available' =>
+              [
+                '@attr' =>
+                [
+                  'file' => 'etc/local-config.ini',
+                ],
+              ],
+              'then' =>
+              [
+                'property' =>
+                [
+                  '@attr' =>
+                  [
+                    'file' => 'etc/local-config.ini',
+                    'override' => false,
+                  ],
+                ],
+              ],
+            ],
+          ],
+          2 =>
+          [
+            'if' =>
+            [
+              'available' =>
+              [
+                '@attr' =>
+                [
+                  'file' => 'etc/config.ini',
+                ],
+              ],
+              'then' =>
+              [
+                'property' =>
+                [
+                  '@attr' =>
+                  [
+                    'file' => 'etc/config.ini',
+                    'override' => false,
+                  ],
+                ],
+              ],
+            ],
+          ],
+          3 =>
+          [
+            'property' =>
+            [
+              '@attr' =>
+              [
+                'file' => 'etc/config.ini',
+                'override' => false,
+              ],
+            ],
+          ],
+          4 =>
+          [
+            'target' =>
+            [
+              '@attr' =>
+              [
+                'name' => 'list',
+                'description' => 'List targets',
+              ],
+              0 =>
+              [
+                0 =>
+                [
+                  'exec' =>
+                  [
+                    '@attr' =>
+                    [
+                      'command' => 'usr/bin/phing -l',
+                      'level' => 'verbose',
+                      'passthru' => true,
+                    ],
+                  ],
+                ],
+                1 =>
+                [
+                  'exec' =>
+                  [
+                    '@attr' =>
+                    [
+                      'command' => 'usr/bin/phing -l',
+                      'level' => 'verbose',
+                      'passthru' => true,
+                    ],
+                  ],
+                ],
+              ],
+            ],
+          ],
+          5 =>
+          [
+            'target' =>
+            [
+              '@attr' =>
+              [
+                'name' => 'info',
+                'description' => 'Info about the project',
+              ],
+              0 =>
+              [
+                0 =>
+                [
+                  'exec' =>
+                  [
+                    '@attr' =>
+                    [
+                      'command' => 'cat README.md',
+                      'passthru' => true,
+                    ],
+                  ],
+                ],
+              ],
+            ],
+          ],
+          6 =>
+          [
+            'import' =>
+            [
+              '@attr' =>
+              [
+                'file' => 'hipsotech.marshal.ramdisk.xml',
+              ],
+            ],
+          ],
+        ],
+      ],
     ]
 
