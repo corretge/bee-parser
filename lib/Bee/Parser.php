@@ -275,36 +275,15 @@ class Parser
                 }
             } elseif ($this->currentLine === '(') {
                 /**
-                 * Process attribute block by attr block
+                 * Process attribute block
                  */
-                $attrBlock = strstr($value, ')', true) . ')';
-                $restBlock = mb_substr($value, mb_strlen($attrBlock));
-                /*
-                 * always overwrite if in same level we have more (
-                 */
-                $converted = str_replace(
-                    [
-                        "(\n",
-                        "\n)",
-                        "\n",
-                        '(',
-                        ')',
-                    ],
-                    [
-                        '{',
-                        '}',
-                        ', ',
-                        '{',
-                        '}'
-                    ],
-                    $attrBlock
+                return $this->processAttributeBlock(
+                    $data,
+                    $value,
+                    $flags,
+                    $context
                 );
-                $data['@attr'] = $this->parseValue($converted, $flags, $context);
-                if (!empty(trim($restBlock))) {
-                    $data[] = $this->parse($restBlock, $flags);
-                }
-                return $data;
-            } else {
+           } else {
                 // multiple documents are not supported
                 if ('---' === $this->currentLine) {
                     throw new ParseException('Multiple documents are not supported.');
@@ -852,6 +831,52 @@ class Parser
      */
     private function isBlockScalarHeader()
     {
-        return (bool) preg_match('~'.self::BLOCK_SCALAR_HEADER_PATTERN.'$~', $this->currentLine);
+        return (bool)preg_match('~' . self::BLOCK_SCALAR_HEADER_PATTERN . '$~', $this->currentLine);
+    }
+
+    /**
+     * @param array $data
+     * @param string $value
+     * @param int $flags
+     * @param string $context
+     * @return array
+     */
+    protected function processAttributeBlock(
+        $data,
+        $value,
+        $flags,
+        $context
+    )
+    {
+        /**
+         * Process attribute block by attr block
+         */
+        $attrBlock = strstr($value, ')', true) . ')';
+        $restBlock = mb_substr($value, mb_strlen($attrBlock));
+        /*
+         * always overwrite if in same level we have more (
+         */
+        $converted = str_replace(
+            [
+                "(\n",
+                "\n)",
+                "\n",
+                '(',
+                ')',
+            ],
+            [
+                '{',
+                '}',
+                ', ',
+                '{',
+                '}'
+            ],
+            $attrBlock
+        );
+        $data['@attr'] = $this->parseValue($converted, $flags, $context);
+        if (!empty(trim($restBlock))) {
+            $data[] = $this->parse($restBlock, $flags);
+        }
+        return $data;
     }
 }
