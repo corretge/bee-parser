@@ -42,14 +42,14 @@ class Parser
     /**
      * Parses a Bee string with multiple sections to a PHP value.
      *
-     * @param string $value A Bee string
+     * @param string $bees A Bee string
      * @param int    $flags A bit field of PARSE_* constants to customize the Bee parser behavior
      *
      * @return mixed A PHP value
      *
      * @throws ParseException If the Bee syntax is not valid
      */
-    public function parseSections($bees, $flags = 0)
+    public function parseDivisions($bees, $flags = 0)
     {
         $sections = [];
 
@@ -60,8 +60,11 @@ class Parser
             }
 
             $section = $this->parse($bee, $flags);
-            if (isset($section['id'])) {
-                $sections[$section['id']] = $section;
+            /**
+             * If we have a Bee division, set as associative key
+             */
+            if (isset($section['division'])) {
+                $sections[$section['division']] = $section;
             } else {
                 $sections[] = $section;
             }
@@ -273,7 +276,7 @@ class Parser
                 if ($isRef) {
                     $this->refs[$isRef] = $data[$key];
                 }
-            } elseif ($this->currentLine === '(') {
+            } elseif ( trim($this->currentLine) === '(') {
                 /**
                  * Process attribute block
                  */
@@ -858,6 +861,7 @@ class Parser
          */
         $converted = str_replace(
             [
+                ":\n",
                 "(\n",
                 "\n)",
                 "\n",
@@ -865,6 +869,7 @@ class Parser
                 ')',
             ],
             [
+                ': ',
                 '{',
                 '}',
                 ', ',

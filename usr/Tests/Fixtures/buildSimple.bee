@@ -1,0 +1,39 @@
+---
+- division: identification
+  name: "Marshal Ramdisk MySQL Tasks and Targets"
+  basedir: "."
+  default: "list"
+
+- division: environment
+  configuration:
+    file:
+      (
+        name: "etc/local-config.ini"
+        override: false
+        disabled: true
+      )
+    - file:
+      (
+        name: "etc/config.ini"
+        override: false
+      )
+    - file:
+      (
+        name: "etc/config.ini.dist"
+        override: false
+      )
+
+- division: data
+  import:
+    file: "hipsotech.marshal.ramdisk.xml"
+
+- division: procedure
+  - name: list
+    description: "List targets"
+      - exec:
+        (
+          command: "usr/bin/phing -l"
+          level: "verbose"
+          passthru: true
+        )
+

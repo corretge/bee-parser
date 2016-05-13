@@ -145,7 +145,7 @@ description: Lorem ipsum
 target: ~
 EOF;
 
-        $this->parser->parseSections($bee);
+        $this->parser->parseDivisions($bee);
 
     }
 
